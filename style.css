@@ -20,6 +20,7 @@ body {
   color: var(--text);
   font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
@@ -29,9 +30,10 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 
 .hero-glow {
   position: absolute;
-  top: -200px; left: 50%; transform: translateX(-50%);
-  width: 760px; height: 540px; max-width: 120vw; pointer-events: none;
-  background: radial-gradient(ellipse 50% 55% at 50% 50%, rgba(0, 206, 209, .18), transparent 70%);
+  inset: 0; pointer-events: none;
+  /* Centred inside the hero and fully transparent at every edge, so the
+     glow never gets clipped into a hard line by overflow:hidden. */
+  background: radial-gradient(ellipse 75% 62% at 50% 42%, rgba(0, 206, 209, .17), transparent 62%);
 }
 
 .tags {
@@ -216,6 +218,7 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 /* --- Monthly returns heatmap --- */
 .heatmap-wrap {
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   max-height: 480px;
   border: 1px solid var(--card-border);
   border-radius: 8px;
@@ -283,8 +286,41 @@ footer {
 
 footer a { color: var(--accent); text-decoration: none; }
 
-@media (max-width: 600px) {
+/* --- Responsive --- */
+@media (max-width: 760px) {
+  main { padding: 16px 12px 40px; }
+
+  .card { padding: 16px 14px 14px; border-radius: 12px; }
+
+  .hero { padding: 44px 4px 28px; }
+  .hero h1 { font-size: clamp(28px, 8vw, 44px); }
+  .tagline { font-size: 15px; }
+
+  /* Stats: tidy 2-per-row grid that fills the width */
+  .stats { gap: 10px; }
+  .stat { flex: 1 1 calc(50% - 10px); min-width: 0; padding: 12px 14px; }
+  .stat .value { font-size: 22px; }
+
+  /* Chart card head stacks: title on top, controls full-width below */
+  .card-head { align-items: flex-start; }
+  .chart-controls { width: 100%; justify-content: space-between; gap: 10px; }
+
   .chart { height: 300px; }
-  .chart.tall { height: 340px; }
-  .stat { min-width: 130px; padding: 11px 16px; }
+  .chart.tall { height: 360px; }
+
+  .period-bar { gap: 5px; }
+  .period-bar button { padding: 5px 10px; font-size: 12px; }
+  .range-inputs { gap: 12px; }
+
+  /* Monthly grid stays a horizontal-scroll table (sticky year + header) */
+  .heatmap-wrap { max-height: 62vh; }
+  #heatmap { font-size: 11px; }
+  #heatmap th, #heatmap td { padding: 4px 6px; }
+}
+
+@media (max-width: 380px) {
+  .hero h1 { font-size: 25px; }
+  .cta { font-size: 13.5px; padding: 10px 16px; }
+  .tag, .live-badge { font-size: 10px; padding: 5px 9px; }
+  .stat .value { font-size: 20px; }
 }
