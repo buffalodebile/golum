@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buffalodebile.github.io/golum/sitemap.xml

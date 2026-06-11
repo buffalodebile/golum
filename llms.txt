@@ -1,0 +1,14 @@
+# Nasdaq x Gold Rotation
+
+> A fully algorithmic trading strategy that rotates between leveraged Nasdaq-100
+> and Gold. Trend-following with volatility-based exposure and a protective stop.
+> Traded live with real money since February 2026. The exact parameters are private.
+
+Key facts:
+- Backtested over 40 years of index data: ~28% backtested CAGR (model, not a promise).
+- Highly volatile: maximum drawdown can reach -70%. Uses leveraged instruments.
+- Live performance is published on this page and updated daily (indexed to 100 at live inception).
+- The strategy can be copied on eToro: https://www.etoro.com/people/pauladrienb
+- Author: Paul Adrien.
+
+This is not investment advice. Past and simulated performance do not guarantee future results.

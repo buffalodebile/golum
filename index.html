@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nasdaq &times; Gold Rotation — Live Algorithmic Trading Strategy</title>
+  <meta name="description" content="A fully algorithmic rotation strategy between leveraged Nasdaq-100 and Gold, traded live with real money on eToro and Interactive Brokers. 40-year backtest, ~28% backtested CAGR, live performance updated daily.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Paul Adrien">
+  <meta name="theme-color" content="#0E1117">
+  <link rel="canonical" href="https://buffalodebile.github.io/golum/">
+  <meta property="og:title" content="Nasdaq × Gold Rotation — Live Algorithmic Strategy">
+  <meta property="og:description" content="Fully algorithmic Nasdaq 100 / Gold rotation. ~28% backtested CAGR. Max drawdown up to -70%. Live performance updated daily.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buffalodebile.github.io/golum/">
+  <meta property="og:image" content="https://buffalodebile.github.io/golum/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nasdaq × Gold Rotation — Live Algorithmic Strategy">
+  <meta name="twitter:description" content="Fully algorithmic Nasdaq 100 / Gold rotation, traded live with real money. Performance updated daily.">
+  <meta name="twitter:image" content="https://buffalodebile.github.io/golum/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Nasdaq × Gold Rotation — Live Algorithmic Trading Strategy",
+    "url": "https://buffalodebile.github.io/golum/",
+    "description": "A fully algorithmic rotation strategy between leveraged Nasdaq-100 and Gold, traded live with real money. 40-year backtest and live performance, updated daily.",
+    "inLanguage": "en",
+    "author": {
+      "@type": "Person",
+      "name": "Paul Adrien",
+      "url": "https://www.etoro.com/people/pauladrienb"
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Algorithmic trading strategy",
+      "description": "Systematic trend-following rotation between leveraged Nasdaq-100 ETPs and Gold, with volatility-based exposure and a protective stop."
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <p class="eyebrow">Systematic &middot; Rules-based &middot; Traded live</p>
+      <h1>Nasdaq &times; Gold Rotation</h1>
+      <p class="tagline">A systematic trend-following strategy, traded live with real money.</p>
+      <div class="stats" id="stats-band"></div>
+      <a class="cta" href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">
+        Copy this strategy on eToro&nbsp;&rarr;
+      </a>
+    </header>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Growth of 100</h2>
+        <div class="toggle" id="scale-toggle">
+          <button data-scale="log" class="active">Log</button>
+          <button data-scale="linear">Linear</button>
+        </div>
+      </div>
+      <div id="equity-chart" class="chart tall"></div>
+      <p class="hint">Dimmed line = simulated model (backtest). Colored line = real money, live execution. Both indexed to 100 at the live start date.</p>
+    </section>
+
+    <section class="card">
+      <h2>Month by month</h2>
+      <div id="monthly-chart" class="chart"></div>
+      <p class="hint">Solid bars = live months. Faded bars = backtest model for context and comparison.</p>
+    </section>
+
+    <section class="card">
+      <h2>How it works</h2>
+      <p>The strategy rotates between a <strong>leveraged Nasdaq-100 ETP</strong> and <strong>leveraged Gold</strong>, following simple, fixed rules:</p>
+      <ul>
+        <li><strong>Trend following.</strong> When the Nasdaq is in a medium-term uptrend, the portfolio holds leveraged Nasdaq, balanced with gold. When the trend breaks, it rotates fully into gold.</li>
+        <li><strong>Volatility scaling.</strong> When market turbulence rises, Nasdaq exposure is automatically scaled down before trouble compounds.</li>
+        <li><strong>Protective stop.</strong> A trailing stop on the whole portfolio cuts risk decisively in deep drawdowns.</li>
+        <li><strong>No discretion.</strong> Signals are computed daily after the US close and executed automatically the next day. No forecasts, no news-reading, no gut feelings.</li>
+      </ul>
+      <p>The exact parameters are the result of years of research and walk-forward validation, and are not disclosed.</p>
+    </section>
+
+    <section class="card disclaimer">
+      <h2>Important disclaimers</h2>
+      <p><strong>Backtest vs live.</strong> The dimmed curve is a simulation on historical index data with cost assumptions. It is a model, not a track record. Live results (colored) differ from the model and will keep differing.</p>
+      <p><strong>Leverage risk.</strong> This strategy uses leveraged ETPs. They can lose value rapidly, including in sideways markets (volatility decay). The model's worst historical drawdown exceeds <span id="dd-callout">-50%</span>. You can lose a substantial part of your investment.</p>
+      <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. Copying any trader involves risk. Do your own research and never invest money you cannot afford to lose.</p>
+    </section>
+
+    <footer>
+      <span id="updated"></span> &middot; <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">eToro profile</a>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
