@@ -35,53 +35,65 @@
     hovermode: "x unified",
     hoverlabel: { bgcolor: "#1A1D26", bordercolor: GRID, font: { color: "#FAFAFA" } },
     legend: { orientation: "h", y: 1.12, x: 0, bgcolor: "rgba(0,0,0,0)" },
-    xaxis: { gridcolor: GRID, zeroline: false },
-    yaxis: { gridcolor: GRID, zeroline: false },
+    xaxis: { gridcolor: GRID, zeroline: false, autorange: true },
+    yaxis: { gridcolor: GRID, zeroline: false, autorange: true },
   };
   const config = { displayModeBar: false, responsive: true };
 
-  const rawTraces = [
+  const tracesTmpl = [
     {
-      x: D.backtest.dates, y: D.backtest.index,
       name: "Backtest (model, since " + D.backtest.dates[0].slice(0, 4) + ")",
       mode: "lines", line: { color: DIM, width: 1.6 },
       hovertemplate: "$%{y:,.0f}<extra>model</extra>",
     },
     {
-      x: D.backtest_since_inception.dates, y: D.backtest_since_inception.index,
       name: "Model since live start",
       mode: "lines", line: { color: DIM, width: 1.6, dash: "dot" },
       hovertemplate: "$%{y:,.0f}<extra>model</extra>",
     },
     {
-      x: D.live.dates, y: D.live.index,
       name: "Live performance (real money)",
       mode: "lines", line: { color: ACCENT, width: 2.6 },
       hovertemplate: "$%{y:,.0f}<extra>live</extra>",
     },
   ];
 
-  function reindexTraces(traces, startDate) {
-    return traces.map(t => {
-      const pairs = [];
-      for (let i = 0; i < t.x.length; i++) {
-        if (t.x[i] >= startDate) pairs.push({ d: t.x[i], y: t.y[i] });
+  const dataSources = [
+    { x: D.backtest.dates, y: D.backtest.index },
+    { x: D.backtest_since_inception.dates, y: D.backtest_since_inception.index },
+    { x: D.live.dates, y: D.live.index },
+  ];
+
+  function buildTraces(years) {
+    const traces = [];
+    for (let i = 0; i < 3; i++) {
+      const src = dataSources[i];
+      let x, y;
+      if (years === null) {
+        x = src.x;
+        y = src.y;
+      } else {
+        const lastDate = dataSources[2].x[dataSources[2].x.length - 1];
+        const d = new Date(lastDate.slice(0, 4) + "-" + lastDate.slice(5, 7) + "-" + lastDate.slice(8, 10));
+        d.setFullYear(d.getFullYear() - years);
+        const start = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+        const pairs = [];
+        for (let j = 0; j < src.x.length; j++) {
+          if (src.x[j] >= start) pairs.push({ x: src.x[j], y: src.y[j] });
+        }
+        if (pairs.length === 0) { x = []; y = []; continue; }
+        const base = pairs[0].y;
+        x = pairs.map(p => p.x);
+        y = pairs.map(p => +(p.y / base * 100).toFixed(2));
       }
-      if (pairs.length < 2) return { ...t, x: [], y: [] };
-      const base = pairs[0].y;
-      return {
-        ...t,
-        x: pairs.map(p => p.d),
-        y: pairs.map(p => +(p.y / base * 100).toFixed(2)),
-      };
-    });
+      traces.push(Object.assign({}, tracesTmpl[i], { x: x, y: y }));
+    }
+    return traces;
   }
 
   function buildLayout(scale) {
     return Object.assign({}, baseLayout, {
-      xaxis: Object.assign({}, baseLayout.xaxis, {
-        rangeselector: undefined,
-      }),
+      xaxis: Object.assign({}, baseLayout.xaxis),
       yaxis: Object.assign({}, baseLayout.yaxis, {
         type: scale,
         title: { text: "Value of $100 invested", font: { size: 12 } },
@@ -101,78 +113,56 @@
 
   let currentScale = "log";
 
-  function updateChart(years) {
-    let traces;
-    if (years === null) {
-      traces = rawTraces;
-    } else {
-      const now = new Date(D.live.dates[D.live.dates.length - 1]);
-      const start = new Date(now);
-      start.setFullYear(start.getFullYear() - years);
-      traces = reindexTraces(rawTraces, start.toISOString().slice(0, 10));
-    }
-    Plotly.react("equity-chart", traces, buildLayout(currentScale), config);
+  function drawChart(years) {
+    Plotly.newPlot("equity-chart", buildTraces(years), buildLayout(currentScale), config);
   }
 
-  Plotly.newPlot("equity-chart", rawTraces, buildLayout("log"), config);
+  drawChart(null);
 
-  const periods = [
-    { label: "1y", y: 1 },
-    { label: "3y", y: 3 },
-    { label: "5y", y: 5 },
-    { label: "10y", y: 10 },
-    { label: "All", y: null },
-  ];
-
-  const periodToggle = document.getElementById("period-toggle");
-  periodToggle.innerHTML = periods.map(p =>
-    `<button data-y="${p.y === null ? 'all' : p.y}" class="${p.y === null ? 'active' : ''}">${p.label}</button>`
-  ).join("");
-
-  periodToggle.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      periodToggle.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const y = btn.dataset.y === "all" ? null : parseInt(btn.dataset.y);
-      updateChart(y);
+  document.querySelectorAll("#period-toggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#period-toggle button").forEach(function (b) { b.classList.remove("active"); });
+      this.classList.add("active");
+      drawChart(this.dataset.y === "all" ? null : parseInt(this.dataset.y));
     });
   });
 
-  document.querySelectorAll("#scale-toggle button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("#scale-toggle button").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentScale = btn.dataset.scale;
-      const active = periodToggle.querySelector(".active");
-      const y = active.dataset.y === "all" ? null : parseInt(active.dataset.y);
-      updateChart(y);
+  document.querySelectorAll("#scale-toggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("#scale-toggle button").forEach(function (b) { b.classList.remove("active"); });
+      this.classList.add("active");
+      currentScale = this.dataset.scale;
+      var active = document.querySelector("#period-toggle .active");
+      drawChart(active.dataset.y === "all" ? null : parseInt(active.dataset.y));
     });
   });
-
-  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const table = document.getElementById("heatmap");
-  let html = "<thead><tr><th></th>" +
-    MONTHS.map((m) => `<th>${m}</th>`).join("") +
-    "<th class='total-col'>Year</th></tr></thead><tbody>";
-  for (const row of D.heatmap) {
-    const label = row.live ? `${row.y} <span class="live-tag">LIVE</span>` : row.y;
-    html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
-    for (const v of row.m) {
-      const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
-      html += `<td style="background:${cellColor(v, 10)}">${txt}</td>`;
-    }
-    const t = row.total;
-    html += `<td class="total-col" style="background:${cellColor(t, 30)}">` +
-      `${(t > 0 ? "+" : "") + t.toFixed(1)}</td></tr>`;
-  }
-  table.innerHTML = html + "</tbody>";
-  const wrap = table.parentElement;
-  wrap.scrollTop = wrap.scrollHeight;
 
   function cellColor(v, cap) {
     if (v == null) return "transparent";
-    const a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
-    return v >= 0 ? `rgba(38,166,154,${a})` : `rgba(239,83,80,${a})`;
+    var a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
+    return v >= 0 ? "rgba(38,166,154," + a + ")" : "rgba(239,83,80," + a + ")";
   }
+
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var table = document.getElementById("heatmap");
+  var html = "<thead><tr><th></th>" +
+    MONTHS.map(function (m) { return "<th>" + m + "</th>"; }).join("") +
+    "<th class='total-col'>Year</th></tr></thead><tbody>";
+  for (var r = 0; r < D.heatmap.length; r++) {
+    var row = D.heatmap[r];
+    var label = row.live ? row.y + ' <span class="live-tag">LIVE</span>' : "" + row.y;
+    html += "<tr" + (row.live ? ' class="live-row"' : "") + "><th>" + label + "</th>";
+    for (var c = 0; c < row.m.length; c++) {
+      var v = row.m[c];
+      var txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
+      html += '<td style="background:' + cellColor(v, 10) + '">' + txt + "</td>";
+    }
+    var t = row.total;
+    html += '<td class="total-col" style="background:' + cellColor(t, 30) + '">' +
+      (t > 0 ? "+" : "") + t.toFixed(1) + "</td></tr>";
+  }
+  table.innerHTML = html + "</tbody>";
+  var wrap = table.parentElement;
+  wrap.scrollTop = wrap.scrollHeight;
 })();
