@@ -1,6 +1,3 @@
-/* Public results page — renders SITE_DATA (data.js) with Plotly.
-   Colors match the Streamlit dashboard: live #00CED1, dimmed backtest. */
-
 (function () {
   const D = window.SITE_DATA;
   if (!D) {
@@ -16,7 +13,6 @@
   const GRID = "#262730";
   const MUTED = "#9AA0AC";
 
-  // --- Stats band ---
   const s = D.stats;
   const fmtPct = (v) => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
   document.getElementById("stats-band").innerHTML = [
@@ -38,14 +34,13 @@
     margin: { l: 55, r: 15, t: 10, b: 40 },
     hovermode: "x unified",
     hoverlabel: { bgcolor: "#1A1D26", bordercolor: GRID, font: { color: "#FAFAFA" } },
-    legend: { orientation: "h", y: 1.08, x: 0, bgcolor: "rgba(0,0,0,0)" },
+    legend: { orientation: "h", y: 1.12, x: 0, bgcolor: "rgba(0,0,0,0)" },
     xaxis: { gridcolor: GRID, zeroline: false },
     yaxis: { gridcolor: GRID, zeroline: false },
   };
   const config = { displayModeBar: false, responsive: true };
 
-  // --- Equity chart ---
-  const equityTraces = [
+  const rawTraces = [
     {
       x: D.backtest.dates, y: D.backtest.index,
       name: "Backtest (model, since " + D.backtest.dates[0].slice(0, 4) + ")",
@@ -66,24 +61,26 @@
     },
   ];
 
-  // Months elapsed since live inception (for the "Live" zoom button)
-  const liveMonths = Math.max(2, Math.round(
-    (new Date(D.live.dates[D.live.dates.length - 1]) - new Date(D.inception)) / 2.63e9) + 1);
+  function reindexTraces(traces, startDate) {
+    return traces.map(t => {
+      const pairs = [];
+      for (let i = 0; i < t.x.length; i++) {
+        if (t.x[i] >= startDate) pairs.push({ d: t.x[i], y: t.y[i] });
+      }
+      if (pairs.length < 2) return { ...t, x: [], y: [] };
+      const base = pairs[0].y;
+      return {
+        ...t,
+        x: pairs.map(p => p.d),
+        y: pairs.map(p => +(p.y / base * 100).toFixed(2)),
+      };
+    });
+  }
 
-  function equityLayout(scale) {
+  function buildLayout(scale) {
     return Object.assign({}, baseLayout, {
       xaxis: Object.assign({}, baseLayout.xaxis, {
-        rangeselector: {
-          buttons: [
-            { step: "all", label: "All" },
-            { count: 10, step: "year", stepmode: "backward", label: "10y" },
-            { count: 1, step: "year", stepmode: "backward", label: "1y" },
-            { count: liveMonths, step: "month", stepmode: "backward", label: "Live" },
-          ],
-          bgcolor: "#1A1D26", activecolor: "#00CED1",
-          bordercolor: GRID, borderwidth: 1,
-          font: { color: "#FAFAFA", size: 11 }, y: 1.18,
-        },
+        rangeselector: undefined,
       }),
       yaxis: Object.assign({}, baseLayout.yaxis, {
         type: scale,
@@ -102,24 +99,56 @@
     });
   }
 
-  Plotly.newPlot("equity-chart", equityTraces, equityLayout("log"), config);
+  let currentScale = "log";
+
+  function updateChart(years) {
+    let traces;
+    if (years === null) {
+      traces = rawTraces;
+    } else {
+      const now = new Date(D.live.dates[D.live.dates.length - 1]);
+      const start = new Date(now);
+      start.setFullYear(start.getFullYear() - years);
+      traces = reindexTraces(rawTraces, start.toISOString().slice(0, 10));
+    }
+    Plotly.react("equity-chart", traces, buildLayout(currentScale), config);
+  }
+
+  Plotly.newPlot("equity-chart", rawTraces, buildLayout("log"), config);
+
+  const periods = [
+    { label: "1y", y: 1 },
+    { label: "3y", y: 3 },
+    { label: "5y", y: 5 },
+    { label: "10y", y: 10 },
+    { label: "All", y: null },
+  ];
+
+  const periodToggle = document.getElementById("period-toggle");
+  periodToggle.innerHTML = periods.map(p =>
+    `<button data-y="${p.y === null ? 'all' : p.y}" class="${p.y === null ? 'active' : ''}">${p.label}</button>`
+  ).join("");
+
+  periodToggle.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      periodToggle.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const y = btn.dataset.y === "all" ? null : parseInt(btn.dataset.y);
+      updateChart(y);
+    });
+  });
 
   document.querySelectorAll("#scale-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("#scale-toggle button").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      Plotly.relayout("equity-chart", { "yaxis.type": btn.dataset.scale });
+      currentScale = btn.dataset.scale;
+      const active = periodToggle.querySelector(".active");
+      const y = active.dataset.y === "all" ? null : parseInt(active.dataset.y);
+      updateChart(y);
     });
   });
 
-  // --- Monthly returns heatmap (Streamlit-style grid) ---
-  // Cell tint: green for positive, red for negative, intensity scales with
-  // |return| (months saturate at ±10%, year totals at ±30%).
-  function cellColor(v, cap) {
-    if (v == null) return "transparent";
-    const a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
-    return v >= 0 ? `rgba(38,166,154,${a})` : `rgba(239,83,80,${a})`;
-  }
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const table = document.getElementById("heatmap");
@@ -138,7 +167,12 @@
       `${(t > 0 ? "+" : "") + t.toFixed(1)}</td></tr>`;
   }
   table.innerHTML = html + "</tbody>";
-  // Most visitors care about recent years: scroll the grid to the bottom
   const wrap = table.parentElement;
   wrap.scrollTop = wrap.scrollHeight;
+
+  function cellColor(v, cap) {
+    if (v == null) return "transparent";
+    const a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
+    return v >= 0 ? `rgba(38,166,154,${a})` : `rgba(239,83,80,${a})`;
+  }
 })();
