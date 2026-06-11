@@ -59,6 +59,22 @@
     return { x, y };
   }
 
+  // Underwater drawdown over the window: % below the running peak (peak resets
+  // at the window's left edge, so it tracks the selected time frame).
+  function ddWindow(series, from, to) {
+    let peak = -Infinity;
+    const x = [], y = [];
+    for (let i = 0; i < series.dates.length; i++) {
+      const d = series.dates[i];
+      if (d < from || d > to) continue;
+      const v = series.values[i];
+      if (v > peak) peak = v;
+      x.push(d);
+      y.push(v / peak * 100 - 100);
+    }
+    return { x, y };
+  }
+
   function minusYears(iso, n) {
     const d = new Date(iso + "T00:00:00Z");
     d.setUTCFullYear(d.getUTCFullYear() - n);
@@ -101,6 +117,7 @@
 
   function render() {
     const sStrat = rebase(strat, state.from, state.to);
+    const ddS = ddWindow(strat, state.from, state.to);
     const traces = [{
       x: sStrat.x, y: sStrat.y, name: "Strategy",
       mode: "lines", line: { color: ACCENT, width: 2.4 },
@@ -129,15 +146,83 @@
 
     const layout = Object.assign({}, baseLayout, {
       shapes, annotations, showlegend: state.nasdaq,
+      margin: { l: 62, r: 18, t: 18, b: 6 },
       xaxis: Object.assign({}, baseLayout.xaxis, {
-        type: "date", range: [state.from, state.to],
+        type: "date", range: [state.from, state.to], showticklabels: false,
       }),
       yaxis: Object.assign({}, baseLayout.yaxis, {
         type: state.scale, tickprefix: "$",
+        fixedrange: true,  // drag selects a horizontal time window, not a 2D box
         title: { text: "Value of $100 invested", font: { size: 12 } },
       }),
     });
     Plotly.react("equity-chart", traces, layout, config);
+
+    // --- Drawdown (underwater), sharing the same time window ---
+    const ddTraces = [{
+      x: ddS.x, y: ddS.y, name: "Strategy",
+      mode: "lines", line: { color: RED, width: 1 },
+      fill: "tozeroy", fillcolor: "rgba(239,83,80,.22)",
+      hovertemplate: "%{y:.1f}%<extra>Drawdown</extra>",
+    }];
+    if (state.nasdaq) {
+      const ddN = ddWindow(ndx, state.from, state.to);
+      ddTraces.push({
+        x: ddN.x, y: ddN.y, name: "Nasdaq-100",
+        mode: "lines", line: { color: NASDAQ, width: 1.4 },
+        hovertemplate: "%{y:.1f}%<extra>Nasdaq DD</extra>",
+      });
+    }
+    const ddLayout = Object.assign({}, baseLayout, {
+      shapes, showlegend: false,
+      margin: { l: 62, r: 18, t: 6, b: 34 },
+      xaxis: Object.assign({}, baseLayout.xaxis, {
+        type: "date", range: [state.from, state.to], fixedrange: true,
+      }),
+      yaxis: Object.assign({}, baseLayout.yaxis, {
+        ticksuffix: "%", fixedrange: true, rangemode: "nonpositive",
+        title: { text: "Drawdown (%)", font: { size: 12 } },
+      }),
+    });
+    Plotly.react("drawdown-chart", ddTraces, ddLayout, config);
+  }
+
+  function setActivePreset(label) {
+    bar.querySelectorAll("button").forEach((b) =>
+      b.classList.toggle("active", label != null && b.textContent === label));
+  }
+
+  // A mouse drag / zoom on the chart only changes Plotly's x-range; re-base to
+  // $100 by reading the new range and re-rendering. yaxis.fixedrange keeps the
+  // drag horizontal so it reads as a time-window selection.
+  function toISO(x) {
+    return typeof x === "number"
+      ? new Date(x).toISOString().slice(0, 10)
+      : String(x).slice(0, 10);
+  }
+  function wireZoom() {
+    const gd = document.getElementById("equity-chart");
+    let guard = false;
+    gd.on("plotly_relayout", (ev) => {
+      if (guard) return;
+      if (ev["xaxis.autorange"]) {           // double-click reset
+        state.from = firstDate; state.to = today;
+        setActivePreset("All");
+        fromInput.value = state.from; toInput.value = state.to;
+        guard = true; render(); guard = false;
+        return;
+      }
+      const x0 = ev["xaxis.range[0]"], x1 = ev["xaxis.range[1]"];
+      if (x0 == null || x1 == null) return;
+      let f = toISO(x0), t = toISO(x1);
+      if (f < firstDate) f = firstDate;
+      if (t > today) t = today;
+      if (f >= t) return;
+      state.from = f; state.to = t;
+      setActivePreset(null);                 // it's now a custom range
+      fromInput.value = f; toInput.value = t;
+      guard = true; render(); guard = false;
+    });
   }
 
   // Period preset buttons
@@ -181,6 +266,7 @@
   fromInput.value = state.from;
   toInput.value = state.to;
   render();
+  wireZoom();
 
   // ---- Monthly returns heatmap (Streamlit-style grid) ----
   function cellColor(v, cap) {
