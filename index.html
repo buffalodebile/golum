@@ -45,7 +45,7 @@
 <body>
   <main>
     <header class="hero">
-      <p class="eyebrow">Systematic &middot; Rules-based &middot; Traded live</p>
+      <p class="eyebrow">Systematic &middot; Volatility-scaled rotation &middot; Traded live</p>
       <h1>Nasdaq &times; Gold Rotation</h1>
       <p class="tagline">A systematic trend-following strategy, traded live with real money.</p>
       <div class="stats" id="stats-band"></div>
@@ -56,20 +56,22 @@
 
     <section class="card">
       <div class="card-head">
-        <h2>Growth of 100</h2>
+        <h2>Growth of $100</h2>
         <div class="toggle" id="scale-toggle">
           <button data-scale="log" class="active">Log</button>
           <button data-scale="linear">Linear</button>
         </div>
       </div>
       <div id="equity-chart" class="chart tall"></div>
-      <p class="hint">Dimmed line = simulated model (backtest). Colored line = real money, live execution. Both indexed to 100 at the live start date.</p>
+      <p class="hint">What $100 invested in the model at the start would have become. Dimmed line = simulated model (backtest). Colored line = real money, live execution, continuing the model from the live start date.</p>
     </section>
 
     <section class="card">
-      <h2>Month by month</h2>
-      <div id="monthly-chart" class="chart"></div>
-      <p class="hint">Solid bars = live months. Faded bars = backtest model for context and comparison.</p>
+      <h2>Monthly returns (%)</h2>
+      <div class="heatmap-wrap">
+        <table id="heatmap"></table>
+      </div>
+      <p class="hint">Model rows = backtest. <span class="live-tag">LIVE</span> rows = real money. The first live month is partial (live start mid-month). Live differs from the model: real instruments and costs, execution timing, and progressive capital deployment at the start.</p>
     </section>
 
     <section class="card">

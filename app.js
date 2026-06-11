@@ -50,19 +50,19 @@
       x: D.backtest.dates, y: D.backtest.index,
       name: "Backtest (model, since " + D.backtest.dates[0].slice(0, 4) + ")",
       mode: "lines", line: { color: DIM, width: 1.6 },
-      hovertemplate: "%{y:.4~g}<extra>model</extra>",
+      hovertemplate: "$%{y:,.0f}<extra>model</extra>",
     },
     {
       x: D.backtest_since_inception.dates, y: D.backtest_since_inception.index,
       name: "Model since live start",
       mode: "lines", line: { color: DIM, width: 1.6, dash: "dot" },
-      hovertemplate: "%{y:.1f}<extra>model</extra>",
+      hovertemplate: "$%{y:,.0f}<extra>model</extra>",
     },
     {
       x: D.live.dates, y: D.live.index,
       name: "Live performance (real money)",
       mode: "lines", line: { color: ACCENT, width: 2.6 },
-      hovertemplate: "%{y:.1f}<extra>live</extra>",
+      hovertemplate: "$%{y:,.0f}<extra>live</extra>",
     },
   ];
 
@@ -87,7 +87,8 @@
       }),
       yaxis: Object.assign({}, baseLayout.yaxis, {
         type: scale,
-        title: { text: "Index (100 = live start)", font: { size: 12 } },
+        title: { text: "Value of $100 invested", font: { size: 12 } },
+        tickprefix: "$",
       }),
       shapes: [{
         type: "line", x0: D.inception, x1: D.inception, y0: 0, y1: 1,
@@ -111,29 +112,33 @@
     });
   });
 
-  // --- Monthly returns chart ---
-  const months = D.monthly.map((r) => r.m);
-  const btPct = D.monthly.map((r) => r.backtest_pct);
-  const livePct = D.monthly.map((r) => r.live_pct ?? null);
-  const liveColors = livePct.map((v) => (v != null && v < 0 ? RED : GREEN));
-  const btColors = btPct.map((v) => (v < 0 ? "rgba(239,83,80,0.25)" : "rgba(38,166,154,0.25)"));
-
-  Plotly.newPlot("monthly-chart", [
-    {
-      x: months, y: btPct, type: "bar", name: "Backtest (model)",
-      marker: { color: btColors },
-      hovertemplate: "%{y:.1f}%<extra>model</extra>",
-    },
-    {
-      x: months, y: livePct, type: "bar", name: "Live",
-      marker: { color: liveColors },
-      hovertemplate: "%{y:.1f}%<extra>live</extra>",
-    },
-  ], Object.assign({}, baseLayout, {
-    barmode: "group",
-    yaxis: Object.assign({}, baseLayout.yaxis, {
-      title: { text: "Monthly return (%)", font: { size: 12 } },
-      ticksuffix: "%",
-    }),
-  }), config);
+  // --- Monthly returns heatmap (Streamlit-style grid) ---
+  // Cell tint: green for positive, red for negative, intensity scales with
+  // |return| (months saturate at ±10%, year totals at ±30%).
+  function cellColor(v, cap) {
+    if (v == null) return "transparent";
+    const a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
+    return v >= 0 ? `rgba(38,166,154,${a})` : `rgba(239,83,80,${a})`;
+  }
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const table = document.getElementById("heatmap");
+  let html = "<thead><tr><th></th>" +
+    MONTHS.map((m) => `<th>${m}</th>`).join("") +
+    "<th class='total-col'>Year</th></tr></thead><tbody>";
+  for (const row of D.heatmap) {
+    const label = row.live ? `${row.y} <span class="live-tag">LIVE</span>` : row.y;
+    html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
+    for (const v of row.m) {
+      const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
+      html += `<td style="background:${cellColor(v, 10)}">${txt}</td>`;
+    }
+    const t = row.total;
+    html += `<td class="total-col" style="background:${cellColor(t, 30)}">` +
+      `${(t > 0 ? "+" : "") + t.toFixed(1)}</td></tr>`;
+  }
+  table.innerHTML = html + "</tbody>";
+  // Most visitors care about recent years: scroll the grid to the bottom
+  const wrap = table.parentElement;
+  wrap.scrollTop = wrap.scrollHeight;
 })();
