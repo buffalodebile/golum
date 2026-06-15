@@ -91,43 +91,22 @@
       <p class="hint">Plain rows are the backtested model; <span class="live-tag">LIVE</span> rows are real money. Live won't match the model exactly: real costs, execution timing, and a gradual start.</p>
     </section>
 
-    <section class="card">
+    <section class="card faq">
       <h2>How it works</h2>
       <p>The strategy rotates between a <strong>leveraged Nasdaq-100 ETP</strong> and <strong>leveraged Gold</strong>, following simple, fixed rules. Signals are computed daily after the US close and executed automatically the next day, with no discretion.</p>
-      <ul>
-        <li><strong>Trend following.</strong> When the Nasdaq is in a medium-term uptrend, the portfolio holds leveraged Nasdaq, balanced with gold. When the trend breaks, it rotates fully into gold.</li>
-        <li><strong>Volatility scaling.</strong> When market turbulence rises, Nasdaq exposure is automatically scaled down before trouble compounds.</li>
-        <li><strong>Protective stop.</strong> A trailing stop on the whole portfolio cuts risk decisively in deep drawdowns.</li>
-      </ul>
+      <details name="how">
+        <summary>Trend following</summary>
+        <div class="answer">When the Nasdaq is in a medium-term uptrend, the portfolio holds leveraged Nasdaq, balanced with gold. When the trend breaks, it rotates fully into gold.</div>
+      </details>
+      <details name="how">
+        <summary>Volatility scaling</summary>
+        <div class="answer">When market turbulence rises, Nasdaq exposure is automatically scaled down before trouble compounds.</div>
+      </details>
+      <details name="how">
+        <summary>Protective stop</summary>
+        <div class="answer">A trailing stop on the whole portfolio cuts risk decisively in deep drawdowns.</div>
+      </details>
       <p>The exact parameters are the result of years of research and walk-forward validation, and are kept private.</p>
-    </section>
-
-    <section class="card faq">
-      <h2>FAQ</h2>
-      <details name="faq">
-        <summary>Is this real money or just a backtest?</summary>
-        <div class="answer">Both, on one chart. Left of the dashed line is a backtest on historical data, a model. Right of it is a real-money account, traded live on eToro and Interactive Brokers, updated daily.</div>
-      </details>
-      <details name="faq">
-        <summary>Why doesn't the live curve match the backtest?</summary>
-        <div class="answer">It never will, exactly. The model assumes idealized prices and costs; live trading has real instruments, real spreads and fees, execution a day after the signal, and capital that was deployed gradually at the start. Treat the model as the idea and the live curve as the reality.</div>
-      </details>
-      <details name="faq">
-        <summary>How risky is it?</summary>
-        <div class="answer">Very. It uses leveraged products that can lose value fast, including in choppy, sideways markets (volatility decay). The backtested model has fallen more than 60% from its peak at the worst. You should expect deep drawdowns and only invest money you can afford to lose.</div>
-      </details>
-      <details name="faq">
-        <summary>Can I lose more than I put in?</summary>
-        <div class="answer">No. The strategy holds leveraged ETPs, not margin or CFDs, so a position can't take you below zero. You can still lose a large part of what you invest.</div>
-      </details>
-      <details name="faq">
-        <summary>How often does it trade?</summary>
-        <div class="answer">Rarely. It only acts when the trend flips, the stop triggers, or the split drifts too far. Most days it does nothing at all.</div>
-      </details>
-      <details name="faq">
-        <summary>How do I copy it on eToro?</summary>
-        <div class="answer">Open an eToro account, go to the <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">profile</a>, and copy it for any amount above eToro's minimum. Your account then mirrors the trades automatically. Copying involves risk and is not investment advice.</div>
-      </details>
     </section>
 
     <section class="card disclaimer">
