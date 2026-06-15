@@ -32,8 +32,11 @@
 
   const ddEl = document.getElementById("dd-callout");
   if (ddEl) ddEl.textContent = s.backtest_max_dd_pct.toFixed(0) + "%";
+  const updatedText = "Data updated " + D.generated_at;
   const upEl = document.getElementById("updated");
-  if (upEl) upEl.textContent = "Data updated " + D.generated_at;
+  if (upEl) upEl.textContent = updatedText;
+  const upHero = document.getElementById("updated-hero");
+  if (upHero) upHero.textContent = updatedText;
 
   // ---- Equity chart ----
   const strat = D.strategy;     // {dates, values} growth of $100 since 1985
