@@ -96,6 +96,10 @@
       return d.toISOString().slice(0, 10);
     }
 
+    // Drop fixed-horizon presets longer than the available history (e.g. no
+    // "20Y" on a strategy with only ~17 years of backtest). All/YTD/Live always
+    // stay.
+    const spanYears = (new Date(today) - new Date(firstDate)) / (365.25 * 86400000);
     const PRESETS = [
       ["All", () => firstDate],
       ["20Y", () => minusYears(today, 20)],
@@ -105,7 +109,10 @@
       ["1Y", () => minusYears(today, 1)],
       ["YTD", () => today.slice(0, 4) + "-01-01"],
       ["Live", () => inception],
-    ];
+    ].filter(([label]) => {
+      const m = label.match(/^(\d+)Y$/);
+      return !m || +m[1] <= spanYears;
+    });
 
     const bar = document.getElementById(ids.periodBar);
     bar.innerHTML = PRESETS.map(([label], i) =>
