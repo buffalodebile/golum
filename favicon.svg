@@ -1,13 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
   <defs>
-    <linearGradient id="pg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+    <linearGradient id="pg" x1="6" y1="40" x2="42" y2="10" gradientUnits="userSpaceOnUse">
       <stop stop-color="#22D3EE"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/>
     </linearGradient>
   </defs>
   <rect width="48" height="48" rx="11" fill="#0E1117"/>
-  <path d="M24 11 L38 36 H10 Z" fill="rgba(255,255,255,.05)" stroke="url(#pg)" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M4 24 H17" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M27 26 L44 19" stroke="#22D3EE" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M27 28 L44 28" stroke="#6366F1" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M27 30 L44 37" stroke="#EC4899" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M24 9 L41 39 H7 Z" fill="url(#pg)" stroke="url(#pg)" stroke-width="2" stroke-linejoin="round"/>
 </svg>

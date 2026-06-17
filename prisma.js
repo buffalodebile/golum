@@ -81,8 +81,17 @@
           entries.forEach(function (e) {
             if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
           });
-        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
         reveals.forEach(function (r) { io.observe(r); });
+        // safety net: reveal anything already in/above the viewport (fast scroll, restore, bfcache)
+        var sweep = function () {
+          document.querySelectorAll(".reveal:not(.in)").forEach(function (r) {
+            if (r.getBoundingClientRect().top < window.innerHeight * 0.92) { r.classList.add("in"); io.unobserve(r); }
+          });
+        };
+        window.addEventListener("scroll", sweep, { passive: true });
+        window.addEventListener("load", sweep);
+        sweep();
       }
     }
 
