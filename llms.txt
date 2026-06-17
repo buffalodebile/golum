@@ -1,14 +1,30 @@
-# Nasdaq x Gold Rotation
+# Prisma Capital
 
-> A fully algorithmic trading strategy that rotates between leveraged Nasdaq-100
-> and Gold. Trend-following with volatility-based exposure and a protective stop.
-> Traded live with real money since February 2026. The exact parameters are private.
+> Prisma Capital runs two fully algorithmic, rules-based trading strategies,
+> traded live with real money since early 2026. Backtests and live performance
+> are published and updated daily (indexed to 100 at live inception). The exact
+> strategy parameters are private. This is not investment advice.
 
-Key facts:
-- Backtested over 40 years of index data: ~40% backtested CAGR (model, not a promise).
-- Highly volatile: model maximum drawdown about -62%, and leveraged instruments can lose value rapidly.
-- Live performance is published on this page and updated daily (indexed to 100 at live inception).
-- The strategy can be copied on eToro: https://www.etoro.com/people/pauladrienb
-- Author: Paul Adrien.
+## Strategies
 
-This is not investment advice. Past and simulated performance do not guarantee future results.
+### Nasdaq x Gold Rotation (higher risk)
+URL: https://buffalodebile.github.io/golum/rotation.html
+- Rotates between leveraged Nasdaq-100 and Gold: trend-following, volatility-based
+  exposure scaling, and a protective trailing stop.
+- High risk / high reward. Backtested over ~40 years of index data, with a high
+  model maximum drawdown; leveraged instruments can lose value rapidly.
+- Can be copied on eToro: https://www.etoro.com/people/pauladrienb
+
+### Quality (lower risk)
+URL: https://buffalodebile.github.io/golum/quality.html
+- Buys financially strong, low-debt companies with healthy growth at a reasonable
+  price, in a focused, equal-weighted basket of US stocks, rebalanced twice a year.
+- Lower risk. Backtested since 2010. Quality investing favours consistently
+  profitable, financially solid businesses bought at sensible valuations.
+
+## Contact
+URL: https://buffalodebile.github.io/golum/contact.html
+- For setting up or copying the strategies, or any question.
+
+Author: Paul Adrien. Not investment advice. Past and simulated performance do not
+guarantee future results. These strategies involve risk, including loss of capital.

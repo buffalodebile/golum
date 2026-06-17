@@ -25,35 +25,6 @@ body {
 
 main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 
-/* --- Tabs --- */
-.tabbar {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  margin: 4px 0 0;
-}
-
-.tabbtn {
-  background: var(--card);
-  color: var(--muted);
-  border: 1px solid var(--card-border);
-  border-radius: 999px;
-  padding: 9px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color .12s, border-color .12s, background .12s;
-}
-.tabbtn:hover { color: var(--text); border-color: #3a3e4a; }
-.tabbtn.active {
-  color: #06282a;
-  background: var(--accent);
-  border-color: var(--accent);
-  font-weight: 700;
-}
-
-.tabpanel[hidden] { display: none; }
-
 /* --- Hero --- */
 .hero { position: relative; text-align: center; padding: 60px 8px 38px; overflow: hidden; }
 
@@ -310,6 +281,25 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   vertical-align: 1px;
 }
 .live-tag .live-dot { width: 5px; height: 5px; }
+
+/* --- Risk gauge (strategy hero, under the stats band) --- */
+.risk-gauge { max-width: 360px; margin: 22px auto 4px; text-align: left; }
+.rg-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 9px; }
+.rg-title { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rg-score { font-family: "Space Grotesk", "Inter", sans-serif; font-variant-numeric: tabular-nums; line-height: 1; }
+.rg-score b { font-size: 22px; font-weight: 700; }
+.rg-score span { color: var(--muted); font-size: 13px; margin-left: 1px; }
+.rg-track { display: flex; gap: 4px; }
+.rg-seg {
+  flex: 1; height: 10px; border-radius: 3px;
+  background: var(--spectrum, linear-gradient(100deg, #22D3EE, #6366F1, #EC4899));
+  background-size: 1000% 100%;
+  background-position: calc(var(--i) / 9 * 100%) 0;
+  opacity: .15; transition: opacity .3s ease;
+}
+.rg-seg.on { opacity: 1; }
+.rg-scale { display: flex; justify-content: space-between; margin-top: 7px; font-size: 11px; letter-spacing: .04em; color: var(--muted); }
+.rg-note { color: var(--muted); font-size: 11.5px; margin-top: 8px; line-height: 1.45; }
 
 /* --- Current portfolio (Quality tab) --- */
 .countdown {

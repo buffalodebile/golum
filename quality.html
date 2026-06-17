@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality — Prisma Capital</title>
+  <meta name="description" content="A quality strategy that buys financially strong companies with solid fundamentals, low debt and healthy growth. Backtest since 2010 and live performance, updated daily.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Prisma Capital">
+  <meta name="theme-color" content="#0E1117">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://buffalodebile.github.io/golum/quality.html">
+  <meta property="og:title" content="Quality — Prisma Capital">
+  <meta property="og:description" content="A quality strategy that buys financially strong companies, traded live with real money. Backtest and live performance, updated daily.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buffalodebile.github.io/golum/quality.html">
+  <meta property="og:image" content="https://buffalodebile.github.io/golum/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://buffalodebile.github.io/golum/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="prisma.css">
+  <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+  <script src="quality.js"></script>
+</head>
+<body class="strategy quality-page">
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+        <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <defs><linearGradient id="pg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+          <path d="M20 7 L33 31 H7 Z" stroke="url(#pg)" stroke-width="2" stroke-linejoin="round" fill="rgba(255,255,255,.04)"/>
+          <path d="M2 20 H15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 22 L38 16" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 24 L38 24" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 26 L38 32" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="rotation.html">Nasdaq &times; Gold</a>
+        <a href="quality.html" class="active">Quality</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="btn btn-ghost nav-cta" href="contact.html">Get in touch</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All strategies
+    </a>
+
+    <header class="hero">
+      <div class="hero-glow"></div>
+      <div class="tags">
+        <span class="tag">ALGORITHMIC</span>
+        <span class="tag">QUALITY &middot; GROWTH</span>
+        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      </div>
+      <h1>Quality</h1>
+      <p class="tagline">A quality strategy that buys financially strong companies (solid fundamentals, low debt and healthy growth) and holds a focused basket of US stocks, refreshed twice a year.</p>
+      <div class="stats" id="stats-band-q"></div>
+      <div class="risk-gauge" id="risk-gauge-q"></div>
+      <div class="updated-hero" id="updated-hero-q"></div>
+    </header>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Growth of $100</h2>
+        <div class="chart-controls">
+          <label class="cmp"><input type="checkbox" id="cmp-nasdaq-q"> Compare Nasdaq&#8209;100</label>
+          <div class="toggle" id="scale-toggle-q">
+            <button data-scale="log" class="active">Log</button>
+            <button data-scale="linear">Linear</button>
+          </div>
+        </div>
+      </div>
+      <div class="period-bar" id="period-bar-q"></div>
+      <div id="equity-chart-q" class="chart tall"></div>
+      <div id="drawdown-chart-q" class="chart dd"></div>
+      <div class="range-inputs">
+        <label>From <input type="date" id="from-date-q"></label>
+        <label>To <input type="date" id="to-date-q"></label>
+      </div>
+      <p class="hint">What $100 invested would have become. The dashed line marks the live-trading start: left of it is the backtest model, right of it is real money. Every period re-bases to $100 at the left edge. Tick <em>Compare Nasdaq&#8209;100</em> to overlay a buy &amp; hold benchmark.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Current portfolio</h2>
+        <div class="countdown" id="countdown-q"></div>
+      </div>
+      <div class="holdings-wrap">
+        <table class="holdings" id="holdings-q"></table>
+      </div>
+      <p class="hint">Equal-weight, rebalanced twice a year. <em>Growth</em> is each stock's price change since the last rebalance (its entry into the portfolio).</p>
+    </section>
+
+    <section class="card">
+      <h2>Monthly returns (%)</h2>
+      <div class="heatmap-wrap">
+        <table class="heatmap" id="heatmap-q"></table>
+      </div>
+      <p class="hint">Plain rows are the backtested model; <span class="live-tag">LIVE</span> rows are real money. Live won't match the model exactly: real costs, execution timing, and a gradual start.</p>
+    </section>
+
+    <section class="card faq">
+      <h2>How it works</h2>
+      <p>The strategy ranks US companies on <strong>quality</strong>, <strong>financial strength</strong> and <strong>reasonable valuation</strong>, then holds a focused, equal-weighted basket. The selection is recomputed twice a year from the latest published company accounts and rebuilt automatically, with no discretion.</p>
+      <details name="how-quality">
+        <summary>Strong fundamentals</summary>
+        <div class="answer">Only profitable companies with solid, improving fundamentals make the shortlist. Weak or deteriorating balance sheets are filtered out before anything else.</div>
+      </details>
+      <details name="how-quality">
+        <summary>Low debt, healthy growth</summary>
+        <div class="answer">Among quality names, the strategy favours low-debt companies with healthy growth, trading at a sensible price.</div>
+      </details>
+      <details name="how-quality">
+        <summary>Focused &amp; protected</summary>
+        <div class="answer">The basket is concentrated and equal-weighted. A per-position protective stop limits the damage from any single holding between rebalances.</div>
+      </details>
+      <p>The exact selection rules are the result of years of research and walk-forward validation, and are kept private.</p>
+    </section>
+
+    <section class="card disclaimer">
+      <h2>Important disclaimers</h2>
+      <p><strong>Backtest vs live.</strong> Left of the dashed line, the curve is a simulation on historical company and price data with cost assumptions. It is a model, not a track record. Right of the dashed line is real money, and live results differ from the model and will keep differing.</p>
+      <p><strong>Concentration risk.</strong> This is a focused basket of individual stocks. A single holding can fall sharply and weigh heavily on the portfolio. You can lose a substantial part of your investment.</p>
+      <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. The holdings shown are for transparency, not a recommendation. Do your own research and never invest money you cannot afford to lose.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+          <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M20 7 L33 31 H7 Z" stroke="url(#pg)" stroke-width="2" stroke-linejoin="round" fill="rgba(255,255,255,.04)"/>
+            <path d="M2 20 H15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 22 L38 16" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 24 L38 24" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 26 L38 32" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+        </a>
+        <p>Fully systematic, rules-based strategies, traded live with real money. Backtests and live performance, updated daily.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Strategies</h5>
+        <a href="rotation.html">Nasdaq &times; Gold Rotation</a>
+        <a href="quality.html">Quality</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">eToro profile</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Not investment advice. Past performance does not guarantee future results. These strategies involve risk, including the loss of capital. Backtested results are simulations on historical data, not a track record.</p>
+      <p class="copy">&copy; Prisma Capital</p>
+    </div>
+  </footer>
+
+  <script src="prisma.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

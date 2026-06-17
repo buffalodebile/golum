@@ -54,6 +54,8 @@
     const upHero = document.getElementById(ids.updatedHero);
     if (upHero) upHero.textContent = "Data updated " + D.generated_at;
 
+    if (ids.risk && ids.riskGauge) renderRiskGauge(ids.risk, ids.riskGauge);
+
     // ---- Equity chart ----
     const strat = D.strategy;
     const ndx = D.nasdaq;
@@ -293,13 +295,16 @@
       const label = row.live
         ? `${row.y} <span class="live-tag"><span class="live-dot"></span>LIVE</span>`
         : row.y;
+      // Non-color cue for live (real-money) months, for users who can't perceive
+      // the green border/label (color-blind, high-contrast).
+      const liveTitle = row.live ? ' title="Live (real money)"' : "";
       html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
       for (const v of row.m) {
         const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
-        html += `<td style="background:${cellColor(v, 10)}">${txt}</td>`;
+        html += `<td${liveTitle} style="background:${cellColor(v, 10)}">${txt}</td>`;
       }
       const t = row.total;
-      html += `<td class="total-col" style="background:${cellColor(t, 30)}">` +
+      html += `<td class="total-col"${liveTitle} style="background:${cellColor(t, 30)}">` +
         `${(t > 0 ? "+" : "") + t.toFixed(1)}</td></tr>`;
     }
     table.innerHTML = html + "</tbody>";
@@ -312,6 +317,26 @@
         Plotly.Plots.resize(document.getElementById(ids.drawdown));
       },
     };
+  }
+
+  // ---- Risk gauge (1-10 editorial indicator, shown under the stats band) ----
+  function renderRiskGauge(level, elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const lvl = Math.max(1, Math.min(10, Math.round(level)));
+    const scoreColor = lvl >= 8 ? "var(--magenta, #EC4899)"
+      : lvl >= 5 ? "var(--indigo, #6366F1)" : "var(--accent, #00CED1)";
+    let segs = "";
+    for (let i = 0; i < 10; i++) {
+      segs += `<span class="rg-seg${i < lvl ? " on" : ""}" style="--i:${i}"></span>`;
+    }
+    el.innerHTML =
+      `<div class="rg-head"><span class="rg-title">Risk level</span>` +
+      `<span class="rg-score" style="color:${scoreColor}"><b>${lvl}</b><span>/10</span></span></div>` +
+      `<div class="rg-track" role="img" aria-label="Risk level ${lvl} out of 10">${segs}</div>` +
+      `<div class="rg-scale"><span>Lower risk</span><span>Higher risk</span></div>` +
+      `<p class="rg-note">A 1–10 indicator of how bumpy the ride can be, ` +
+      `based on leverage and the strategy's historical drawdown.</p>`;
   }
 
   // ---- Current portfolio (Quality tab): holdings table + rebalance countdown ----
@@ -354,57 +379,30 @@
     equity: "equity-chart", drawdown: "drawdown-chart", periodBar: "period-bar",
     fromDate: "from-date", toDate: "to-date", cmpNasdaq: "cmp-nasdaq",
     scaleToggle: "scale-toggle", heatmap: "heatmap", ddCallout: "dd-callout",
+    risk: 9, riskGauge: "risk-gauge",
   };
   const Q_IDS = {
     stats: "stats-band-q", updatedHero: "updated-hero-q",
     equity: "equity-chart-q", drawdown: "drawdown-chart-q", periodBar: "period-bar-q",
     fromDate: "from-date-q", toDate: "to-date-q", cmpNasdaq: "cmp-nasdaq-q",
     scaleToggle: "scale-toggle-q", heatmap: "heatmap-q", ddCallout: null,
+    risk: 6, riskGauge: "risk-gauge-q",
   };
 
-  // Footer "Data updated" — use whichever strategy data is present.
+  // ---- Per-page init ----
+  // Each strategy now lives on its own page (rotation.html / quality.html).
+  // Render whichever panel is present. Panels are always visible, so Plotly lays
+  // out at full width immediately — no tab switching or lazy-render needed.
   const gen = (window.SITE_DATA && window.SITE_DATA.generated_at) ||
               (window.QUALITY_DATA && window.QUALITY_DATA.generated_at);
   const upEl = document.getElementById("updated");
   if (upEl && gen) upEl.textContent = "Data updated " + gen;
 
-  // Rotation tab is visible on load → render now.
-  let rotationApp = null, qualityApp = null;
-  rotationApp = renderStrategy(window.SITE_DATA, R_IDS);
-
-  // ---- Tabs ----
-  const tabbar = document.getElementById("tabbar");
-  const panels = {
-    rotation: document.getElementById("tab-rotation"),
-    quality: document.getElementById("tab-quality"),
-  };
-
-  function showTab(name) {
-    tabbar.querySelectorAll(".tabbtn").forEach((b) => {
-      const on = b.dataset.tab === name;
-      b.classList.toggle("active", on);
-      b.setAttribute("aria-selected", on ? "true" : "false");
-    });
-    for (const [k, p] of Object.entries(panels)) {
-      const on = k === name;
-      p.classList.toggle("active", on);
-      p.hidden = !on;
-    }
-    if (name === "quality") {
-      if (!qualityApp) {
-        // Panel is now visible → safe to lay out Plotly at full width.
-        qualityApp = renderStrategy(window.QUALITY_DATA, Q_IDS);
-        renderHoldings(window.QUALITY_DATA || {}, { table: "holdings-q", countdown: "countdown-q" });
-      } else {
-        qualityApp.resize();
-      }
-    } else if (rotationApp) {
-      rotationApp.resize();
-    }
+  if (document.getElementById("equity-chart") && window.SITE_DATA) {
+    renderStrategy(window.SITE_DATA, R_IDS);
   }
-
-  tabbar.addEventListener("click", (e) => {
-    const b = e.target.closest(".tabbtn");
-    if (b) showTab(b.dataset.tab);
-  });
+  if (document.getElementById("equity-chart-q") && window.QUALITY_DATA) {
+    renderStrategy(window.QUALITY_DATA, Q_IDS);
+    renderHoldings(window.QUALITY_DATA, { table: "holdings-q", countdown: "countdown-q" });
+  }
 })();

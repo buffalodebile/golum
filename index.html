@@ -3,208 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Algorithmic Strategies — Nasdaq &times; Gold &amp; Quality</title>
-  <meta name="description" content="Two fully algorithmic strategies traded live with real money: a leveraged Nasdaq-100 / Gold rotation, and a quality-value stock-picking strategy. 40-year and 17-year backtests, live performance updated daily.">
+  <title>Prisma Capital — Algorithmic strategies, traded live</title>
+  <meta name="description" content="Prisma Capital runs two fully algorithmic strategies, traded live with real money: a high-risk leveraged Nasdaq-100 × Gold rotation and a lower-risk Quality strategy built on company fundamentals. Backtests and live performance, updated daily.">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="Paul Adrien">
+  <meta name="author" content="Prisma Capital">
   <meta name="theme-color" content="#0E1117">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="canonical" href="https://buffalodebile.github.io/golum/">
-  <meta property="og:title" content="Live Algorithmic Strategies — Nasdaq × Gold & Quality">
-  <meta property="og:description" content="Two fully algorithmic strategies traded live with real money. Backtests and live performance, updated daily.">
+  <meta property="og:title" content="Prisma Capital — Algorithmic strategies, traded live">
+  <meta property="og:description" content="Two fully algorithmic strategies, traded live with real money: a high-risk leveraged rotation and a lower-risk Quality strategy. Backtests and live performance, updated daily.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://buffalodebile.github.io/golum/">
   <meta property="og:image" content="https://buffalodebile.github.io/golum/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Live Algorithmic Strategies — Nasdaq × Gold & Quality">
-  <meta name="twitter:description" content="Two fully algorithmic strategies traded live with real money. Performance updated daily.">
+  <meta name="twitter:title" content="Prisma Capital — Algorithmic strategies, traded live">
+  <meta name="twitter:description" content="Two fully algorithmic strategies, traded live with real money. Backtests and live performance, updated daily.">
   <meta name="twitter:image" content="https://buffalodebile.github.io/golum/og-image.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Live Algorithmic Trading Strategies",
+    "@type": "Organization",
+    "name": "Prisma Capital",
     "url": "https://buffalodebile.github.io/golum/",
-    "description": "Two fully algorithmic strategies traded live with real money: a leveraged Nasdaq-100 / Gold rotation and a quality-value stock-picking strategy. Backtests and live performance, updated daily.",
-    "inLanguage": "en",
-    "author": {
-      "@type": "Person",
-      "name": "Paul Adrien",
-      "url": "https://www.etoro.com/people/pauladrienb"
-    }
+    "description": "Prisma Capital runs two fully algorithmic strategies traded live with real money: a high-risk leveraged Nasdaq-100 × Gold rotation and a lower-risk Quality strategy built on company fundamentals.",
+    "sameAs": ["https://www.etoro.com/people/pauladrienb"]
   }
   </script>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
-  <script src="data.js"></script>
-  <script src="quality.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="prisma.css">
+  <script src="data.js" defer></script>
+  <script src="quality.js" defer></script>
 </head>
-<body>
-  <main>
-    <nav class="tabbar" id="tabbar" role="tablist" aria-label="Strategies">
-      <button class="tabbtn active" data-tab="rotation" role="tab" aria-selected="true">Nasdaq &times; Gold</button>
-      <button class="tabbtn" data-tab="quality" role="tab" aria-selected="false">Quality</button>
-    </nav>
+<body class="landing">
 
-    <!-- ============================ ROTATION TAB ============================ -->
-    <section class="tabpanel active" id="tab-rotation" role="tabpanel">
-      <header class="hero">
-        <div class="hero-glow"></div>
-        <div class="tags">
-          <span class="tag">ALGORITHMIC</span>
-          <span class="tag">NASDAQ&#8209;100 &times; GOLD</span>
-          <span class="live-badge"><span class="live-dot"></span>LIVE</span>
-        </div>
-        <h1>Nasdaq <span class="x">&times;</span> Gold Rotation</h1>
-        <p class="tagline">An algorithmic strategy that has beaten the Nasdaq across four decades of backtesting, rotating between leveraged Nasdaq&#8209;100 and Gold and scaling its exposure to market volatility.</p>
-        <div class="stats" id="stats-band"></div>
-        <div class="updated-hero" id="updated-hero"></div>
-        <a class="cta" href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1294" width="18" height="18" fill="#fff"><path fill-rule="evenodd" d="m1093.8 481.7c-11.5-10.3-17.7-18-8.5-18 19.5 0 137.6 17.2 162-71.3 24.4-88.5-105.9-355.4-110.8-366.9-4.7-11 5-24.9 19.3-24.9 14.3 0 24.4 15.1 25.9 16.9 132.9 165.4 318.4 371.8 342.2 460.7 60.5 225.4-173.3 316.7-320.7 333.4q-0.7 0.1-1.4-0.1-0.7-0.2-1.3-0.7-0.6-0.4-0.9-1.1-0.3-0.7-0.3-1.4v-80c0-108-40.7-188.9-105.4-246.6zm-653.3 0c-64.6 57.7-105.3 138.6-105.3 246.6v80q0 0.7-0.3 1.4-0.4 0.7-0.9 1.1-0.6 0.5-1.3 0.7-0.7 0.2-1.4 0.1c-147.6-16.7-381.3-108-320.9-333.3 23.9-89 209.4-295.4 342.3-460.7 1.5-1.9 11.8-17 25.8-17 14.1 0 24.1 14 19.3 24.9-4.9 11.5-135.1 278.4-110.8 366.9 24.4 88.5 142.5 71.2 162 71.2 9.4 0 3.1 7.8-8.5 18.1zm333.8-37.3c157.5 1.5 324.1 94.4 324.1 281.8v156.8c0 5.6-1.1 11.2-3.3 16.4-2.1 5.3-5.3 10-9.3 14-4 4-8.7 7.2-14 9.4-5.2 2.1-10.8 3.3-16.4 3.3h-445.3v85.1c0 77.2 91.7 121.3 164.2 121.3 53.5 0 129.4-27.4 159.2-77q0.3-0.7 0.9-1.1 0.5-0.5 1.3-0.7 0.7-0.2 1.4-0.1 0.8 0.1 1.4 0.5c54.4 30.7 86.3 48.2 141.3 79.7 1.7 0.9 2.9 2.4 3.5 4.2 0.5 1.8 0.3 3.8-0.5 5.4-62.4 100.9-193.4 148.6-308.4 149.7-160.6-1.6-337.3-91.3-337.3-281.8v-285c0-187.5 176.7-280.4 337.3-281.9zm154.4 281.9c0-77.2-86.8-113.4-154.5-113.4-72.4 0-164.2 36.2-164.2 113.4v56.6h311.6q1.5 0 2.8-0.6 1.4-0.6 2.4-1.6c1.3-1.4 2-3.1 1.9-5z"/></svg>
-          Copy this strategy on eToro&nbsp;&rarr;
+  <!-- ============================ Prism loader ============================ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-stage">
+      <span class="lp-beam"></span>
+      <span class="lp-prism"></span>
+      <span class="lp-fan">
+        <span class="lp-ray r1"></span><span class="lp-ray r2"></span><span class="lp-ray r3"></span>
+        <span class="lp-ray r4"></span><span class="lp-ray r5"></span>
+      </span>
+    </div>
+    <div class="loader-word">Prisma <span>Capital</span></div>
+  </div>
+
+  <!-- ============================ Navigation ============================ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+        <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <defs><linearGradient id="pg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+          <path d="M20 7 L33 31 H7 Z" stroke="url(#pg)" stroke-width="2" stroke-linejoin="round" fill="rgba(255,255,255,.04)"/>
+          <path d="M2 20 H15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 22 L38 16" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 24 L38 24" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+          <path d="M24 26 L38 32" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#strategies">Strategies</a>
+        <a href="rotation.html">Nasdaq &times; Gold</a>
+        <a href="quality.html">Quality</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="btn btn-ghost nav-cta" href="contact.html">Get in touch</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================ Hero ============================ -->
+  <section class="hero-p">
+    <div class="hero-aurora"></div>
+    <div class="hero-grid"></div>
+    <div class="container">
+      <span class="eyebrow"><span class="dot"></span>Trading live with real money</span>
+      <h1>
+        <span class="reveal-word">Two</span> <span class="reveal-word">algorithmic</span> <span class="reveal-word">strategies.</span><br>
+        <span class="reveal-word">One</span> <span class="reveal-word"><span class="spectrum-text">spectrum</span></span> <span class="reveal-word">of</span> <span class="reveal-word">risk.</span>
+      </h1>
+      <p class="lead">Prisma Capital builds fully systematic, rules-based strategies and trades them with real money, from a high-octane leveraged rotation to a steady quality compounder. Backtested and live, updated every day.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="#strategies">Explore the strategies
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
-      </header>
+        <a class="btn btn-ghost btn-lg" href="contact.html">Get in touch</a>
+      </div>
+    </div>
+    <a class="hero-scroll" href="#what" aria-label="Scroll down"><span class="mouse"></span>Scroll</a>
+  </section>
 
-      <section class="card">
-        <div class="card-head">
-          <h2>Growth of $100</h2>
-          <div class="chart-controls">
-            <label class="cmp"><input type="checkbox" id="cmp-nasdaq"> Compare Nasdaq&#8209;100</label>
-            <div class="toggle" id="scale-toggle">
-              <button data-scale="log" class="active">Log</button>
-              <button data-scale="linear">Linear</button>
-            </div>
+  <!-- ============================ What we do ============================ -->
+  <section class="section" id="what">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">How we work</span>
+        <h2>Discipline, not predictions</h2>
+        <p>No forecasts, no gut calls. Just fixed rules, executed the same way every single day.</p>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM2 9h2M2 15h2M20 9h2M20 15h2M9 2v2M15 2v2M9 20v2M15 20v2"/></svg></div>
+          <h3>Fully systematic</h3>
+          <p>Signals are computed automatically after the US close and executed the next day. No discretion, no second-guessing, no emotion.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+          <h3>Traded live</h3>
+          <p>Real money on the line, not a paper portfolio. The strategies have been running live since early 2026, and you can follow every move.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Radically transparent</h3>
+          <p>Decades of backtest and live results, side by side, refreshed daily. The line where the model stops and real money begins never moves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ Strategy cards ============================ -->
+  <section class="section" id="strategies">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">The strategies</span>
+        <h2>Two strategies, two risk profiles</h2>
+        <p>One built for maximum growth, one built to compound steadily. Pick the one that fits you, or hold both.</p>
+      </div>
+      <div class="strat-grid">
+
+        <a class="strat-card rotation reveal" href="rotation.html">
+          <span class="risk-badge high">High risk &middot; high reward</span>
+          <h3>Nasdaq <span class="spectrum-text">&times;</span> Gold Rotation</h3>
+          <p class="sub">A leveraged Nasdaq-100 rotation that follows the trend, scales down when markets turn turbulent, and rotates into gold (with a protective stop) when the trend breaks. Built to capture big up-markets.</p>
+          <div class="strat-kpis">
+            <div class="k"><div class="v" data-kpi="r-cagr">&mdash;</div><div class="l" data-kpi="r-cagr-l">Model CAGR</div></div>
+            <div class="k"><div class="v" data-kpi="r-live">&mdash;</div><div class="l">Live return</div></div>
+          </div>
+          <span class="strat-link">View strategy
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+        <a class="strat-card quality reveal" href="quality.html">
+          <span class="risk-badge low">Lower risk</span>
+          <h3>Quality</h3>
+          <p class="sub">Owns financially strong, low-debt companies with healthy growth, bought at a sensible price, in a focused basket refreshed twice a year. Built to compound through the cycle.</p>
+          <div class="strat-kpis">
+            <div class="k"><div class="v" data-kpi="q-cagr">&mdash;</div><div class="l" data-kpi="q-cagr-l">Model CAGR</div></div>
+            <div class="k"><div class="v" data-kpi="q-live">&mdash;</div><div class="l">Live return</div></div>
+          </div>
+          <span class="strat-link">View strategy
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ Quality explainer ============================ -->
+  <section class="section" id="quality-explainer">
+    <div class="container">
+      <div class="explainer">
+        <div class="reveal">
+          <span class="kicker">The lower-risk side</span>
+          <h2>What is quality investing?</h2>
+          <p>Quality investing means owning the strongest businesses, not the flashiest tickers. Instead of chasing whatever is hot, it favours companies that are consistently profitable, carry little debt and grow steadily, then buys them at a reasonable price.</p>
+          <p>These are the kind of companies that tend to hold up better when markets fall and compound patiently over years, which is exactly why Quality sits on the calmer end of Prisma Capital's spectrum.</p>
+        </div>
+        <div class="pillars reveal">
+          <div class="pillar">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l6-6 4 4 7-7"/><path d="M14 7h6v6"/></svg></div>
+            <div><h4>Profitable &amp; growing</h4><p>Consistent earnings and durable growth, not promises.</p></div>
+          </div>
+          <div class="pillar">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></div>
+            <div><h4>Financially solid</h4><p>Low debt and strong balance sheets that survive bad years.</p></div>
+          </div>
+          <div class="pillar">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M5 7l7-4 7 4M5 7v6a7 4 0 0014 0V7"/></svg></div>
+            <div><h4>Sensibly priced</h4><p>Great businesses only count when you don't overpay.</p></div>
           </div>
         </div>
-        <div class="period-bar" id="period-bar"></div>
-        <div id="equity-chart" class="chart tall"></div>
-        <div id="drawdown-chart" class="chart dd"></div>
-        <div class="range-inputs">
-          <label>From <input type="date" id="from-date"></label>
-          <label>To <input type="date" id="to-date"></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ Risk spectrum ============================ -->
+  <section class="section" id="spectrum">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Find your place</span>
+        <h2>One spectrum, two ends</h2>
+        <p>Like light through a prism, our strategies spread across the risk spectrum. Where do you sit?</p>
+      </div>
+      <div class="spectrum-rail reveal">
+        <div class="spectrum-bar">
+          <span class="tag q">Quality<small>Lower risk</small></span>
+          <span class="tag r">Nasdaq &times; Gold<small>High risk</small></span>
+          <span class="node q"></span>
+          <span class="node r"></span>
         </div>
-        <p class="hint">What $100 invested would have become. The dashed line marks the live-trading start: left of it is the backtest model, right of it is real money. Every period re-bases to $100 at the left edge. Tick <em>Compare Nasdaq&#8209;100</em> to overlay a buy &amp; hold benchmark.</p>
-      </section>
-
-      <section class="card">
-        <h2>Monthly returns (%)</h2>
-        <div class="heatmap-wrap">
-          <table class="heatmap" id="heatmap"></table>
+        <div class="spectrum-ends">
+          <span>Steady compounding</span>
+          <span>Maximum growth</span>
         </div>
-        <p class="hint">Plain rows are the backtested model; <span class="live-tag">LIVE</span> rows are real money. Live won't match the model exactly: real costs, execution timing, and a gradual start.</p>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="card faq">
-        <h2>How it works</h2>
-        <p>The strategy rotates between a <strong>leveraged Nasdaq-100 ETP</strong> and <strong>leveraged Gold</strong>, following simple, fixed rules. Signals are computed daily after the US close and executed automatically the next day, with no discretion.</p>
-        <details name="how-rotation">
-          <summary>Trend following</summary>
-          <div class="answer">When the Nasdaq is in a medium-term uptrend, the portfolio holds leveraged Nasdaq, balanced with gold. When the trend breaks, it rotates fully into gold.</div>
-        </details>
-        <details name="how-rotation">
-          <summary>Volatility scaling</summary>
-          <div class="answer">When market turbulence rises, Nasdaq exposure is automatically scaled down before trouble compounds.</div>
-        </details>
-        <details name="how-rotation">
-          <summary>Protective stop</summary>
-          <div class="answer">A trailing stop on the whole portfolio cuts risk decisively in deep drawdowns.</div>
-        </details>
-        <p>The exact parameters are the result of years of research and walk-forward validation, and are kept private.</p>
-      </section>
+  <!-- ============================ Contact CTA ============================ -->
+  <section class="section cta-band" id="contact-cta">
+    <div class="container">
+      <div class="cta-card reveal">
+        <h2>Want to put these strategies to work?</h2>
+        <p>If you would like to set up or copy these strategies for your own portfolio, get in touch. We'll get back to you personally.</p>
+        <a class="btn btn-primary btn-lg" href="contact.html">Contact us
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
-      <section class="card disclaimer">
-        <h2>Important disclaimers</h2>
-        <p><strong>Backtest vs live.</strong> Left of the dashed line, the curve is a simulation on historical index data with cost assumptions. It is a model, not a track record. Right of the dashed line is real money, and live results differ from the model and will keep differing.</p>
-        <p><strong>Leverage risk.</strong> This strategy uses leveraged ETPs. They can lose value rapidly, including in sideways markets (volatility decay). The model's worst historical drawdown exceeds <span id="dd-callout">-50%</span>. You can lose a substantial part of your investment.</p>
-        <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. Copying any trader involves risk. Do your own research and never invest money you cannot afford to lose.</p>
-      </section>
-    </section>
+  <!-- ============================ Footer ============================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+          <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M20 7 L33 31 H7 Z" stroke="url(#pg)" stroke-width="2" stroke-linejoin="round" fill="rgba(255,255,255,.04)"/>
+            <path d="M2 20 H15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 22 L38 16" stroke="#22D3EE" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 24 L38 24" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+            <path d="M24 26 L38 32" stroke="#EC4899" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+        </a>
+        <p>Fully systematic, rules-based strategies, traded live with real money. Backtests and live performance, updated daily.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Strategies</h5>
+        <a href="rotation.html">Nasdaq &times; Gold Rotation</a>
+        <a href="quality.html">Quality</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">eToro profile</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Not investment advice. Past performance does not guarantee future results. These strategies involve risk, including the loss of capital. Backtested results are simulations on historical data, not a track record. Do your own research and never invest money you cannot afford to lose.</p>
+      <p class="copy">&copy; Prisma Capital</p>
+    </div>
+  </footer>
 
-    <!-- ============================ QUALITY TAB ============================ -->
-    <section class="tabpanel" id="tab-quality" role="tabpanel" hidden>
-      <header class="hero">
-        <div class="hero-glow"></div>
-        <div class="tags">
-          <span class="tag">ALGORITHMIC</span>
-          <span class="tag">QUALITY &middot; GROWTH</span>
-          <span class="live-badge"><span class="live-dot"></span>LIVE</span>
-        </div>
-        <h1>Quality</h1>
-        <p class="tagline">A quality strategy that buys financially strong companies (solid fundamentals, low debt and healthy growth) and holds a focused basket of US stocks, refreshed twice a year.</p>
-        <div class="stats" id="stats-band-q"></div>
-        <div class="updated-hero" id="updated-hero-q"></div>
-      </header>
-
-      <section class="card">
-        <div class="card-head">
-          <h2>Growth of $100</h2>
-          <div class="chart-controls">
-            <label class="cmp"><input type="checkbox" id="cmp-nasdaq-q"> Compare Nasdaq&#8209;100</label>
-            <div class="toggle" id="scale-toggle-q">
-              <button data-scale="log" class="active">Log</button>
-              <button data-scale="linear">Linear</button>
-            </div>
-          </div>
-        </div>
-        <div class="period-bar" id="period-bar-q"></div>
-        <div id="equity-chart-q" class="chart tall"></div>
-        <div id="drawdown-chart-q" class="chart dd"></div>
-        <div class="range-inputs">
-          <label>From <input type="date" id="from-date-q"></label>
-          <label>To <input type="date" id="to-date-q"></label>
-        </div>
-        <p class="hint">What $100 invested would have become. The dashed line marks the live-trading start: left of it is the backtest model, right of it is real money. Every period re-bases to $100 at the left edge. Tick <em>Compare Nasdaq&#8209;100</em> to overlay a buy &amp; hold benchmark.</p>
-      </section>
-
-      <section class="card">
-        <div class="card-head">
-          <h2>Current portfolio</h2>
-          <div class="countdown" id="countdown-q"></div>
-        </div>
-        <div class="holdings-wrap">
-          <table class="holdings" id="holdings-q"></table>
-        </div>
-        <p class="hint">Equal-weight, rebalanced twice a year. <em>Growth</em> is each stock's price change since the last rebalance (its entry into the portfolio).</p>
-      </section>
-
-      <section class="card">
-        <h2>Monthly returns (%)</h2>
-        <div class="heatmap-wrap">
-          <table class="heatmap" id="heatmap-q"></table>
-        </div>
-        <p class="hint">Plain rows are the backtested model; <span class="live-tag">LIVE</span> rows are real money. Live won't match the model exactly: real costs, execution timing, and a gradual start.</p>
-      </section>
-
-      <section class="card faq">
-        <h2>How it works</h2>
-        <p>The strategy ranks US companies on <strong>quality</strong>, <strong>financial strength</strong> and <strong>reasonable valuation</strong>, then holds a focused, equal-weighted basket. The selection is recomputed twice a year from the latest published company accounts and rebuilt automatically, with no discretion.</p>
-        <details name="how-quality">
-          <summary>Strong fundamentals</summary>
-          <div class="answer">Only profitable companies with solid, improving fundamentals make the shortlist. Weak or deteriorating balance sheets are filtered out before anything else.</div>
-        </details>
-        <details name="how-quality">
-          <summary>Low debt, healthy growth</summary>
-          <div class="answer">Among quality names, the strategy favours low-debt companies with healthy growth, trading at a sensible price.</div>
-        </details>
-        <details name="how-quality">
-          <summary>Focused &amp; protected</summary>
-          <div class="answer">The basket is concentrated and equal-weighted. A per-position protective stop limits the damage from any single holding between rebalances.</div>
-        </details>
-        <p>The exact selection rules are the result of years of research and walk-forward validation, and are kept private.</p>
-      </section>
-
-      <section class="card disclaimer">
-        <h2>Important disclaimers</h2>
-        <p><strong>Backtest vs live.</strong> Left of the dashed line, the curve is a simulation on historical company and price data with cost assumptions. It is a model, not a track record. Right of the dashed line is real money, and live results differ from the model and will keep differing.</p>
-        <p><strong>Concentration risk.</strong> This is a focused basket of individual stocks. A single holding can fall sharply and weigh heavily on the portfolio. You can lose a substantial part of your investment.</p>
-        <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. The holdings shown are for transparency, not a recommendation. Do your own research and never invest money you cannot afford to lose.</p>
-      </section>
-    </section>
-
-    <footer>
-      <span id="updated"></span> &middot; <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">eToro profile</a>
-    </footer>
-  </main>
-  <script src="app.js"></script>
+  <script src="prisma.js"></script>
 </body>
 </html>
