@@ -223,6 +223,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .back-link:hover { color: var(--accent); }
 .back-link svg { width: 15px; height: 15px; }
 body.strategy main { max-width: 1020px; }
+/* strategy-page headline: solid serif (override style.css gradient clip) */
+body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text); color: var(--text); }
 
 /* ============================ Responsive ============================ */
 @media (max-width: 900px) {

@@ -4,11 +4,11 @@
    $100 at the left edge. Optional Nasdaq-100 buy & hold overlay. */
 
 (function () {
-  const ACCENT = "#00CED1";   // strategy
+  const ACCENT = "#5BC8FF";   // strategy (matches site accent)
   const NASDAQ = "#7C9CFF";   // benchmark overlay
-  const RED = "#EF5350";
-  const GRID = "#262730";
-  const MUTED = "#9AA0AC";
+  const RED = "#FB7185";
+  const GRID = "#1B2230";
+  const MUTED = "#8A93A6";
 
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -20,7 +20,7 @@
   function cellColor(v, cap) {
     if (v == null) return "transparent";
     const a = Math.min(Math.abs(v) / cap, 1) * 0.75 + 0.08;
-    return v >= 0 ? `rgba(38,166,154,${a})` : `rgba(239,83,80,${a})`;
+    return v >= 0 ? `rgba(74,222,128,${a})` : `rgba(251,113,133,${a})`;
   }
 
   // Render a full strategy panel (stats band + equity/drawdown charts + heatmap)
@@ -185,7 +185,7 @@
       const ddTraces = [{
         x: ddS.x, y: ddS.y, name: "Strategy",
         mode: "lines", line: { color: RED, width: 1 },
-        fill: "tozeroy", fillcolor: "rgba(239,83,80,.22)",
+        fill: "tozeroy", fillcolor: "rgba(251,113,133,.18)",
         hovertemplate: "%{y:.1f}%<extra>Drawdown</extra>",
       }];
       if (state.nasdaq) {
