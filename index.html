@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prisma Capital — Algorithmic strategies, traded live</title>
-  <meta name="description" content="Prisma Capital runs two fully algorithmic strategies, traded live with real money: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy. Backtests and live performance, updated daily.">
+  <meta name="description" content="Prisma Capital runs two fully algorithmic strategies, traded live: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy. Backtests and live performance, updated daily.">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Prisma Capital">
   <meta name="theme-color" content="#06080E">
@@ -12,13 +12,13 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="canonical" href="https://buffalodebile.github.io/golum/">
   <meta property="og:title" content="Prisma Capital — Algorithmic strategies, traded live">
-  <meta property="og:description" content="Two fully algorithmic strategies, traded live with real money. Backtests and live performance, updated daily.">
+  <meta property="og:description" content="Two fully algorithmic strategies, traded live. Backtests and live performance, updated daily.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://buffalodebile.github.io/golum/">
   <meta property="og:image" content="https://buffalodebile.github.io/golum/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Prisma Capital — Algorithmic strategies, traded live">
-  <meta name="twitter:description" content="Two fully algorithmic strategies, traded live with real money. Performance updated daily.">
+  <meta name="twitter:description" content="Two fully algorithmic strategies, traded live. Performance updated daily.">
   <meta name="twitter:image" content="https://buffalodebile.github.io/golum/og-image.png">
   <script type="application/ld+json">
   {
@@ -26,7 +26,7 @@
     "@type": "Organization",
     "name": "Prisma Capital",
     "url": "https://buffalodebile.github.io/golum/",
-    "description": "Prisma Capital runs two fully algorithmic strategies traded live with real money: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy built on company fundamentals.",
+    "description": "Prisma Capital runs two fully algorithmic strategies traded live: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy built on company fundamentals.",
     "sameAs": ["https://www.etoro.com/people/pauladrienb"]
   }
   </script>
@@ -48,7 +48,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="prisma.css">
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   <script type="importmap">
@@ -63,6 +63,7 @@
   <script src="quality.js" defer></script>
 </head>
 <body class="landing">
+  <div class="grain" aria-hidden="true"></div>
 
   <!-- ============================ Navigation ============================ -->
   <header class="nav" id="nav">
@@ -91,32 +92,31 @@
   <!-- ============================ Hero ============================ -->
   <section class="hero-lab">
     <div class="hero-stage" aria-hidden="true">
-      <div class="grid-bg"></div>
-      <div class="hero-beam"></div>
-      <div id="cube-stage" role="img" aria-label="A glass cube refracting a beam of white light into a spectrum"></div>
+      <div id="cube-stage" role="img" aria-label="A glass prism refracting a beam of white light into a spectrum"></div>
       <div class="hero-scrim"></div>
     </div>
+
+    <div class="hud hud-tr" aria-hidden="true">
+      <span>Refraction <b id="hud-refraction">—</b></span>
+      <span>Dispersion <b id="hud-dispersion">—</b></span>
+    </div>
+    <span class="hud-cross" aria-hidden="true"></span>
+    <span class="hud-vert" aria-hidden="true">Index of refraction · crown glass · n 1.52</span>
+
     <div class="container">
       <div class="hero-copy">
-        <span class="eyebrow"><span class="dot"></span>Trading live · real money</span>
-        <h1>Two algorithmic strategies.<br>One spectrum of returns.</h1>
-        <p class="lead">Prisma Capital builds fully systematic, rules-based strategies and trades them with real money: from a high-conviction leveraged rotation to a steady quality compounder. Backtested and live, updated every day.</p>
+        <span class="eyebrow">Two systematic strategies, traded live</span>
+        <h1>One spectrum<br>of returns.</h1>
+        <p class="lead">Two strategies, one simple idea: trust the rules, not the mood of the day. One rides the trend with leverage; the other compounds patiently on quality. Follow every move, updated daily.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="#strategies">Explore the strategies
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
-          <a class="text-link" href="contact.html">Get in touch
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-        <div class="hero-metrics">
-          <div class="m"><div class="v">2</div><div class="l">Strategies</div></div>
-          <div class="m"><div class="v">2026</div><div class="l">Live since</div></div>
-          <div class="m"><div class="v">Daily</div><div class="l">Updated</div></div>
         </div>
       </div>
     </div>
-    <a class="hero-scroll mono" href="#how"><span class="bar"></span>Scroll</a>
+
+    <span class="hud-hint" aria-hidden="true">Move your cursor to orient the prism</span>
   </section>
 
   <!-- ============================ How we work ============================ -->
@@ -124,24 +124,24 @@
     <div class="container">
       <div class="section-head reveal">
         <span class="kicker">How we work</span>
-        <h2>Discipline, not predictions.</h2>
-        <p>No forecasts, no gut calls. Fixed rules, computed after the US close and executed the next day.</p>
+        <h2>Discipline beats prediction.</h2>
+        <p>We don't forecast the market. The same fixed rules run every day, computed after the US close and placed the next morning.</p>
       </div>
       <div class="features reveal">
         <div class="feature">
-          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="16" cy="16" r="9"/><path d="M16 3v4M16 25v4M3 16h4M25 16h4M16 11a5 5 0 100 10 5 5 0 000-10z"/></svg></div>
+          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="16" cy="16" r="9"/><path d="M16 3v4M16 25v4M3 16h4M25 16h4"/><circle cx="16" cy="16" r="4.5"/></svg></div>
           <h3>Fully systematic</h3>
-          <p>Signals are computed automatically and executed the next day. No discretion, no second-guessing.</p>
+          <p>Signals are computed and placed automatically. No discretion, no last-minute overrides.</p>
         </div>
         <div class="feature">
-          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16h6l4-10 6 20 4-12 2 2h6"/></svg></div>
+          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16h6l4-10 6 20 4-12 2 2h6"/></svg></div>
           <h3>Traded live</h3>
-          <p>Real money on the line since early 2026, not a paper portfolio. Every move is published.</p>
+          <p>Running live since early 2026, not a backtest on paper. Every position is out in the open.</p>
         </div>
         <div class="feature">
-          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16 6 L27 25 H5 Z"/><path d="M3 16h7M22 13l7-3M22 19l7 3"/></svg></div>
-          <h3>Radically transparent</h3>
-          <p>Backtests, live performance, holdings and risk, shown in full and refreshed daily.</p>
+          <div class="gi"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M16 6 L27 25 H5 Z"/><path d="M3 16h7M22 13l7-3M22 19l7 3"/></svg></div>
+          <h3>Fully transparent</h3>
+          <p>Backtests, live results, holdings and risk, shown in full and refreshed daily.</p>
         </div>
       </div>
     </div>
@@ -153,13 +153,13 @@
       <div class="section-head reveal">
         <span class="kicker">Strategies</span>
         <h2>Two engines, one risk spectrum.</h2>
-        <p>One leans into leverage and trend; the other compounds quietly on company fundamentals. Same discipline, opposite ends of the spectrum.</p>
+        <p>One leans into leverage and trend; the other compounds on company fundamentals. Same discipline, opposite ends of the spectrum.</p>
       </div>
       <div class="strat-grid">
         <a class="strat-card reveal" href="rotation.html">
           <span class="risk-badge high">Risk 9 / 10</span>
           <h3>Nasdaq × Gold Rotation</h3>
-          <p class="sub">A leveraged Nasdaq-100 / Gold rotation that follows the medium-term trend and scales exposure to market volatility, with a protective stop.</p>
+          <p class="sub">A leveraged Nasdaq-100 / Gold rotation that follows the medium-term trend and dials risk up or down with the market.</p>
           <div class="strat-kpis">
             <div><div class="v" data-kpi="r-cagr">—</div><div class="l" data-kpi="r-cagr-l">Model CAGR</div></div>
             <div><div class="v" data-kpi="r-live">—</div><div class="l">Live return</div></div>
@@ -171,7 +171,7 @@
         <a class="strat-card reveal" href="quality.html">
           <span class="risk-badge low">Risk 6 / 10</span>
           <h3>Quality</h3>
-          <p class="sub">Financially strong, low-debt US companies with healthy growth at a reasonable price, in a focused basket refreshed twice a year.</p>
+          <p class="sub">Financially strong, low-debt companies bought at a fair price, in a focused basket refreshed twice a year.</p>
           <div class="strat-kpis">
             <div><div class="v" data-kpi="q-cagr">—</div><div class="l" data-kpi="q-cagr-l">Model CAGR</div></div>
             <div><div class="v" data-kpi="q-live">—</div><div class="l">Live return</div></div>
@@ -207,7 +207,7 @@
     <div class="container">
       <div class="cta-card reveal">
         <h2>Put these strategies to work.</h2>
-        <p>Set them up for your own account, or just ask how the rules actually work. A real person replies.</p>
+        <p>Want to run them on your own account, or just curious how the rules work? Send a message, a real person answers.</p>
         <a class="btn btn-primary btn-lg" href="contact.html">Get in touch
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
@@ -226,7 +226,7 @@
           </svg>
           <span class="nav-wordmark">Prisma <b>Capital</b></span>
         </a>
-        <p>Fully systematic, rules-based strategies, traded live with real money. Backtests and live performance, updated daily.</p>
+        <p>Systematic, rules-based strategies, traded live. Backtests and live performance, updated daily.</p>
       </div>
       <div class="footer-col">
         <h5>Strategies</h5>
