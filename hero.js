@@ -99,29 +99,32 @@ if (mount) {
       const i = Math.floor(x), f = x - i, a = STOPS[i], b = STOPS[Math.min(i + 1, STOPS.length - 1)];
       return new THREE.Color((a[0]+(b[0]-a[0])*f)/255, (a[1]+(b[1]-a[1])*f)/255, (a[2]+(b[2]-a[2])*f)/255);
     };
-    // gradient alpha along the beam: bright at the cube, fading out
-    const gc = document.createElement("canvas"); gc.width = 128; gc.height = 4;
-    const g2 = gc.getContext("2d");
-    const lg = g2.createLinearGradient(0, 0, 128, 0);
-    lg.addColorStop(0, "rgba(255,255,255,1)"); lg.addColorStop(0.5, "rgba(255,255,255,.6)"); lg.addColorStop(1, "rgba(255,255,255,0)");
-    g2.fillStyle = lg; g2.fillRect(0, 0, 128, 4);
-    const alphaTex = new THREE.CanvasTexture(gc);
+    // Rainbow beam as ONE textured plane: spectrum across the width, fading along
+    // the length. (Stacking additive colour bands summed to white — this keeps the
+    // colours distinct while staying tight.)
+    const RW = 256, RH = 64;
+    const rc = document.createElement("canvas"); rc.width = RW; rc.height = RH;
+    const rx = rc.getContext("2d");
+    const vg = rx.createLinearGradient(0, 0, 0, RH);
+    ["#ff2d2d", "#ff7a1a", "#ffd400", "#4cd964", "#18b6f6", "#4c6ef5", "#9b5cff"]
+      .forEach((c, i, a) => vg.addColorStop(i / (a.length - 1), c));
+    rx.fillStyle = vg; rx.fillRect(0, 0, RW, RH);
+    rx.globalCompositeOperation = "destination-in";          // fade alpha along length
+    const hg = rx.createLinearGradient(0, 0, RW, 0);
+    hg.addColorStop(0, "rgba(0,0,0,1)"); hg.addColorStop(0.45, "rgba(0,0,0,.7)"); hg.addColorStop(1, "rgba(0,0,0,0)");
+    rx.fillStyle = hg; rx.fillRect(0, 0, RW, RH);
+    const rainbowTex = new THREE.CanvasTexture(rc);
 
-    const N = 16, LEN = 9;
+    const LEN = 9, WIDTH = 0.6;
     const beamGrp = new THREE.Group();
-    beamGrp.position.copy(beamDir.clone().multiplyScalar(1.35));
+    beamGrp.position.copy(beamDir.clone().multiplyScalar(1.25));
     beamGrp.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
-    const bands = [];
-    for (let i = 0; i < N; i++) {
-      const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(LEN, 0.07),
-        new THREE.MeshBasicMaterial({ color: spectrum(i / (N - 1)), transparent: true, opacity: 0.55, alphaMap: alphaTex, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
-      );
-      plane.position.x = LEN / 2;
-      plane.position.y = (i - (N - 1) / 2) * 0.05;   // stacked across the beam width
-      beamGrp.add(plane);
-      bands.push(plane);
-    }
+    const rainbow = new THREE.Mesh(
+      new THREE.PlaneGeometry(LEN, WIDTH),
+      new THREE.MeshBasicMaterial({ map: rainbowTex, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+    );
+    rainbow.position.x = LEN / 2;
+    beamGrp.add(rainbow);
     rig.add(beamGrp);
 
     // --- Bloom ---
@@ -157,13 +160,6 @@ if (mount) {
       cube.rotation.x = cur.x + Math.sin(t * 0.6) * 0.03;
       cube.rotation.y = cur.y + t * 0.09;
       const tilt = Math.abs(Math.sin(cube.rotation.y)) * Math.abs(Math.cos(cube.rotation.x));
-      // Tight, stable rainbow beam: near-parallel bands, contained within the
-      // cube width, independent of cursor position (no wild fanning).
-      const spread = 0.006;
-      for (let i = 0; i < N; i++) {
-        bands[i].rotation.z = (i - (N - 1) / 2) * spread;
-        bands[i].material.opacity = 0.55;
-      }
       beam.material.opacity = 0.78;
       hotspot.material.opacity = 0.85;
       if (++hudTick % 5 === 0) {

@@ -187,15 +187,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
   background: linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 40px 90px -34px rgba(0,0,0,.95), 0 0 60px -20px rgba(91,200,255,.25); }
 
-/* hover micro-animation: a small prism fan that draws in (spectrum colours) */
-.strat-anim { position: absolute; top: 26px; right: 26px; width: 36px; height: 36px; opacity: .8; }
-.strat-anim svg { width: 100%; height: 100%; overflow: visible; }
-.strat-anim .r { stroke-width: 1.7; stroke-linecap: round; stroke-dasharray: 34; stroke-dashoffset: 27; opacity: .6; transition: stroke-dashoffset .55s var(--ease), opacity .55s var(--ease); }
-.strat-card:hover .strat-anim .r { stroke-dashoffset: 0; opacity: 1; }
-.strat-anim .r1 { stroke: #FF3B3B; } .strat-anim .r2 { stroke: #FFB020; } .strat-anim .r3 { stroke: #4CD964; }
-.strat-anim .r4 { stroke: #18B6F6; } .strat-anim .r5 { stroke: #9B5CFF; }
-.strat-card:hover .strat-anim .r2 { transition-delay: .05s; } .strat-card:hover .strat-anim .r3 { transition-delay: .1s; }
-.strat-card:hover .strat-anim .r4 { transition-delay: .15s; } .strat-card:hover .strat-anim .r5 { transition-delay: .2s; }
+/* per-card 3D mark (cards.js): a small spectral octahedron above the name */
+.strat-anim { display: block; width: 84px; height: 84px; margin: 2px 0 4px -8px; }
+.strat-anim canvas { display: block; width: 84px !important; height: 84px !important; }
 .strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); }
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
@@ -265,6 +259,39 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .hero-beam { width: 70%; right: -6%; }
   .hero-scrim { background: linear-gradient(180deg, rgba(6,8,14,.35) 0%, rgba(6,8,14,.86) 46%, rgba(6,8,14,.96) 100%); }
 }
+
+/* ============================ Live badge ============================ */
+.live-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: #4ADE80; padding: 6px 13px; border-radius: 999px; border: 1px solid rgba(74,222,128,.4); background: rgba(74,222,128,.08); }
+.live-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 0 0 rgba(74,222,128,.5); animation: pulse 1.8s infinite; }
+
+/* ============================ Contact page ============================ */
+.contact-wrap { padding: 52px 0 92px; }
+.contact-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 52px; align-items: start; }
+.contact-intro h1 { font-family: var(--font-display); font-size: clamp(38px, 5.6vw, 62px); font-weight: 500; }
+.contact-intro .lead { color: var(--text-2); font-size: 17px; margin-top: 18px; }
+.contact-points { margin-top: 30px; display: grid; gap: 14px; }
+.contact-points li { list-style: none; display: flex; gap: 13px; align-items: flex-start; }
+.contact-points .ic { width: 36px; height: 36px; flex: none; border-radius: 10px; display: grid; place-items: center; background: rgba(91,200,255,.08); border: 1px solid var(--line-2); color: var(--accent); }
+.contact-points .ic svg { width: 18px; height: 18px; }
+.contact-points b { color: var(--text); display: block; font-size: 15px; }
+.contact-points span { font-size: 14px; color: var(--muted); }
+.form-card { background: linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.025)); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.13); border-radius: 18px; padding: 30px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 30px 70px -34px rgba(0,0,0,.9); }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 8px; }
+.field label .req { color: var(--accent); }
+.field input, .field select, .field textarea { width: 100%; background: rgba(0,0,0,.28); color: var(--text); border: 1px solid var(--line-2); border-radius: 11px; padding: 12px 14px; font-size: 15px; font-family: var(--font-sans); line-height: 1.4; transition: border-color .15s, box-shadow .15s; color-scheme: dark; }
+.field textarea { min-height: 130px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: #6b7180; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,200,255,.18); }
+.field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A93A6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+.hp { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
+.form-card .btn-primary { width: 100%; justify-content: center; margin-top: 4px; }
+.form-status { margin-top: 16px; font-size: 14.5px; display: none; padding: 13px 15px; border-radius: 11px; }
+.form-status.show { display: block; }
+.form-status.ok { color: #9ff0c0; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.35); }
+.form-status.err { color: #ffb4b1; background: rgba(251,113,133,.1); border: 1px solid rgba(251,113,133,.35); }
+.form-note { color: var(--muted); font-size: 12.5px; margin-top: 14px; text-align: center; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; gap: 34px; } }
 
 /* ============================ Film grain ============================ */
 .grain { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: .055; mix-blend-mode: overlay;

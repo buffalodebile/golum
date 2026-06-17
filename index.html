@@ -79,7 +79,7 @@
       <nav class="nav-links" aria-label="Primary">
         <a href="#strategies">Strategies</a>
         <a href="rotation.html">Nasdaq × Gold</a>
-        <a href="quality.html">Quality</a>
+        <a href="quality.html">Quality × Growth</a>
         <a href="contact.html">Contact</a>
       </nav>
       <a class="btn btn-ghost nav-cta" href="contact.html">Get in touch</a>
@@ -104,7 +104,7 @@
 
     <div class="container">
       <div class="hero-copy">
-        <span class="eyebrow">Two systematic strategies, traded live</span>
+        <span class="live-badge"><span class="dot"></span>Live</span>
         <h1>The full spectrum<br>of returns.</h1>
         <p class="lead">One strategy rides the trend, the other compounds on quality. Both tracked live, updated daily.</p>
         <div class="hero-actions">
@@ -154,8 +154,8 @@
       </div>
       <div class="strat-grid">
         <a class="strat-card reveal" href="rotation.html">
-          <span class="strat-anim" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><line class="r r1" x1="6" y1="30" x2="32" y2="6"/><line class="r r2" x1="6" y1="30" x2="33" y2="14"/><line class="r r3" x1="6" y1="30" x2="34" y2="22"/><line class="r r4" x1="6" y1="30" x2="33" y2="29"/><line class="r r5" x1="6" y1="30" x2="26" y2="34"/></svg></span>
           <span class="risk-badge high">Risk 9 / 10</span>
+          <span class="strat-anim" data-3d aria-hidden="true"></span>
           <h3>Nasdaq × Gold Rotation</h3>
           <p class="sub">A leveraged Nasdaq-100 / Gold rotation that follows the medium-term trend and dials risk up or down with the market.</p>
           <div class="strat-kpis">
@@ -167,9 +167,9 @@
           </span>
         </a>
         <a class="strat-card reveal" href="quality.html">
-          <span class="strat-anim" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><line class="r r1" x1="6" y1="30" x2="32" y2="6"/><line class="r r2" x1="6" y1="30" x2="33" y2="14"/><line class="r r3" x1="6" y1="30" x2="34" y2="22"/><line class="r r4" x1="6" y1="30" x2="33" y2="29"/><line class="r r5" x1="6" y1="30" x2="26" y2="34"/></svg></span>
           <span class="risk-badge low">Risk 6 / 10</span>
-          <h3>Quality</h3>
+          <span class="strat-anim" data-3d aria-hidden="true"></span>
+          <h3>Quality × Growth</h3>
           <p class="sub">Financially strong, low-debt companies bought at a fair price, in a focused basket refreshed twice a year.</p>
           <div class="strat-kpis">
             <div><div class="v" data-kpi="q-cagr">—</div><div class="l" data-kpi="q-cagr-l">Model CAGR</div></div>
@@ -193,7 +193,7 @@
       </div>
       <div class="spectrum-rail reveal">
         <div class="spectrum-bar">
-          <span class="node q"></span><span class="tag q">Quality<small>6 / 10</small></span>
+          <span class="node q"></span><span class="tag q">Quality × Growth<small>6 / 10</small></span>
           <span class="node r"></span><span class="tag r">Nasdaq × Gold<small>9 / 10</small></span>
         </div>
         <div class="spectrum-ends"><span>Lower risk</span><span>Higher risk</span></div>
@@ -230,7 +230,7 @@
       <div class="footer-col">
         <h5>Strategies</h5>
         <a href="rotation.html">Nasdaq × Gold Rotation</a>
-        <a href="quality.html">Quality</a>
+        <a href="quality.html">Quality × Growth</a>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
@@ -246,5 +246,6 @@
 
   <script src="prisma.js"></script>
   <script type="module" src="hero.js"></script>
+  <script type="module" src="cards.js"></script>
 </body>
 </html>
