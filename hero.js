@@ -74,7 +74,7 @@ if (mount) {
     );
     cube.add(edges);
 
-    const beamDir = new THREE.Vector3(-1, -0.62, 0.05).normalize();
+    const beamDir = new THREE.Vector3(1, -0.55, -0.04).normalize();  // enters top-left, exits lower-right
 
     // --- Incoming white beam (top-right) ---
     const beam = new THREE.Mesh(
@@ -145,8 +145,8 @@ if (mount) {
       const w = W(), h = H(), aspect = w / h;
       renderer.setSize(w, h); composer.setSize(w, h);
       camera.aspect = aspect; camera.updateProjectionMatrix();
-      rig.position.set(aspect > 1.05 ? 0.7 : 0, aspect > 1.05 ? 0.25 : 0.2, 0);
-      rig.scale.setScalar(aspect > 1.05 ? 0.62 : 0.46);
+      rig.position.set(aspect > 1.05 ? 1.95 : 0, aspect > 1.05 ? 0.15 : 0.15, 0);
+      rig.scale.setScalar(aspect > 1.05 ? 0.58 : 0.42);
     }
     layout();
     window.addEventListener("resize", layout);
@@ -157,13 +157,15 @@ if (mount) {
       cube.rotation.x = cur.x + Math.sin(t * 0.6) * 0.03;
       cube.rotation.y = cur.y + t * 0.09;
       const tilt = Math.abs(Math.sin(cube.rotation.y)) * Math.abs(Math.cos(cube.rotation.x));
-      const spread = 0.02 + tilt * 0.05;                  // slight divergence of the rainbow
+      // Tight, stable rainbow beam: near-parallel bands, contained within the
+      // cube width, independent of cursor position (no wild fanning).
+      const spread = 0.006;
       for (let i = 0; i < N; i++) {
         bands[i].rotation.z = (i - (N - 1) / 2) * spread;
-        bands[i].material.opacity = 0.4 + tilt * 0.5;
+        bands[i].material.opacity = 0.55;
       }
-      beam.material.opacity = 0.7 + tilt * 0.25;
-      hotspot.material.opacity = 0.7 + tilt * 0.3;
+      beam.material.opacity = 0.78;
+      hotspot.material.opacity = 0.85;
       if (++hudTick % 5 === 0) {
         setHud("hud-refraction", (5.2 + tilt * 4).toFixed(1) + "°");
         setHud("hud-dispersion", (11 + tilt * 9).toFixed(1) + "°");

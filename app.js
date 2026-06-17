@@ -297,7 +297,7 @@
         : row.y;
       // Non-color cue for live (real-money) months, for users who can't perceive
       // the green border/label (color-blind, high-contrast).
-      const liveTitle = row.live ? ' title="Live (real money)"' : "";
+      const liveTitle = row.live ? ' title="Live"' : "";
       html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
       for (const v of row.m) {
         const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
@@ -334,9 +334,7 @@
       `<div class="rg-head"><span class="rg-title">Risk level</span>` +
       `<span class="rg-score" style="color:${scoreColor}"><b>${lvl}</b><span>/10</span></span></div>` +
       `<div class="rg-track" role="img" aria-label="Risk level ${lvl} out of 10">${segs}</div>` +
-      `<div class="rg-scale"><span>Lower risk</span><span>Higher risk</span></div>` +
-      `<p class="rg-note">A 1–10 indicator of how bumpy the ride can be, ` +
-      `based on leverage and the strategy's historical drawdown.</p>`;
+      `<div class="rg-scale"><span>Lower risk</span><span>Higher risk</span></div>`;
   }
 
   // ---- Current portfolio (Quality tab): holdings table + rebalance countdown ----
