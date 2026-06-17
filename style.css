@@ -25,6 +25,35 @@ body {
 
 main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 
+/* --- Tabs --- */
+.tabbar {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 4px 0 0;
+}
+
+.tabbtn {
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 9px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color .12s, border-color .12s, background .12s;
+}
+.tabbtn:hover { color: var(--text); border-color: #3a3e4a; }
+.tabbtn.active {
+  color: #06282a;
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.tabpanel[hidden] { display: none; }
+
 /* --- Hero --- */
 .hero { position: relative; text-align: center; padding: 60px 8px 38px; overflow: hidden; }
 
@@ -233,7 +262,7 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   border-radius: 8px;
 }
 
-#heatmap {
+.heatmap {
   border-collapse: collapse;
   width: 100%;
   font-size: 12px;
@@ -241,13 +270,13 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   white-space: nowrap;
 }
 
-#heatmap th, #heatmap td {
+.heatmap th, .heatmap td {
   padding: 4px 7px;
   text-align: right;
   border: 1px solid #14161d;
 }
 
-#heatmap thead th {
+.heatmap thead th {
   position: sticky;
   top: 0;
   background: var(--card);
@@ -255,7 +284,7 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   z-index: 1;
 }
 
-#heatmap tbody th {
+.heatmap tbody th {
   position: sticky;
   left: 0;
   background: var(--card);
@@ -264,10 +293,10 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   text-align: left;
 }
 
-#heatmap .total-col { font-weight: 700; border-left: 2px solid var(--card-border); }
+.heatmap .total-col { font-weight: 700; border-left: 2px solid var(--card-border); }
 
-#heatmap tr.live-row td { border-top: 1.5px solid rgba(28,226,123,.55); border-bottom: 1.5px solid rgba(28,226,123,.55); }
-#heatmap tr.live-row th { color: #1ce27b; }
+.heatmap tr.live-row td { border-top: 1.5px solid rgba(28,226,123,.55); border-bottom: 1.5px solid rgba(28,226,123,.55); }
+.heatmap tr.live-row th { color: #1ce27b; }
 
 .live-tag {
   display: inline-flex; align-items: center; gap: 4px;
@@ -281,6 +310,50 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
   vertical-align: 1px;
 }
 .live-tag .live-dot { width: 5px; height: 5px; }
+
+/* --- Current portfolio (Quality tab) --- */
+.countdown {
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.countdown strong { color: var(--accent); font-size: 16px; }
+.countdown .cd-date { opacity: .8; }
+
+.holdings-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+
+.holdings {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdings th, .holdings td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+  white-space: nowrap;
+}
+.holdings thead th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.holdings tbody tr:last-child td { border-bottom: none; }
+.holdings tbody tr:hover td { background: rgba(255, 255, 255, .02); }
+
+.holdings .tk { font-weight: 700; color: var(--text); }
+.holdings .sec { color: var(--muted); }
+.holdings .num { text-align: right; font-variant-numeric: tabular-nums; }
+.holdings .num.pos { color: var(--green); font-weight: 600; }
+.holdings .num.neg { color: var(--red); font-weight: 600; }
 
 /* --- FAQ accordion (native <details>, exclusive via shared name="faq") --- */
 .faq details {
@@ -362,8 +435,13 @@ footer a { color: var(--accent); text-decoration: none; }
 
   /* Monthly grid stays a horizontal-scroll table (sticky year + header) */
   .heatmap-wrap { max-height: 62vh; }
-  #heatmap { font-size: 11px; }
-  #heatmap th, #heatmap td { padding: 4px 6px; }
+  .heatmap { font-size: 11px; }
+  .heatmap th, .heatmap td { padding: 4px 6px; }
+
+  .holdings { font-size: 12.5px; }
+  .holdings th, .holdings td { padding: 8px 9px; }
+  .holdings .sec { display: none; }
+  .card-head .countdown { width: 100%; }
 }
 
 @media (max-width: 380px) {
