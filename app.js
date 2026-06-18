@@ -324,8 +324,8 @@
     const el = document.getElementById(elId);
     if (!el) return;
     const lvl = Math.max(1, Math.min(10, Math.round(level)));
-    const scoreColor = lvl >= 8 ? "var(--magenta, #EC4899)"
-      : lvl >= 5 ? "var(--indigo, #6366F1)" : "var(--accent, #00CED1)";
+    const scoreColor = lvl >= 8 ? "var(--sp-1, #FF2D2D)"
+      : lvl >= 5 ? "var(--sp-6, #4C6EF5)" : "var(--accent, #5BC8FF)";
     let segs = "";
     for (let i = 0; i < 10; i++) {
       segs += `<span class="rg-seg${i < lvl ? " on" : ""}" style="--i:${i}"></span>`;
