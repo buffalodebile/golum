@@ -113,8 +113,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
 /* ============================ Navigation ============================ */
-.nav { position: sticky; top: 0; z-index: 100; height: var(--nav-h); display: flex; align-items: center; padding: 0 28px; border-bottom: 1px solid transparent; transition: background .3s, border-color .3s, backdrop-filter .3s; }
-.nav.scrolled { background: rgba(6,8,14,.72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom-color: var(--line); }
+.nav { position: sticky; top: 0; z-index: 100; height: var(--nav-h); display: flex; align-items: center; padding: 0 28px; background: rgba(255,255,255,.05); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-bottom: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); transition: background .3s, border-color .3s, backdrop-filter .3s; }
+.nav.scrolled { background: rgba(255,255,255,.08); border-bottom-color: rgba(255,255,255,.14); }
 .nav-inner { width: 100%; max-width: var(--maxw); margin: 0 auto; display: flex; align-items: center; gap: 16px; }
 .nav-brand { display: inline-flex; align-items: center; gap: 10px; }
 .nav-logo { width: 26px; height: 26px; flex: none; }
@@ -124,7 +124,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .nav-links a { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 13px; border-radius: 8px; transition: color .15s, background .15s; }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.04); }
 .nav-links a.active { color: var(--accent); }
-.nav-cta { margin-left: 8px; padding: 9px 17px; font-size: 14px; }
+.nav-cta { margin-left: 8px; padding: 9px 17px; font-size: 14px; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.34); color: #fff; }
 .nav-toggle { display: none; margin-left: auto; width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line-2); color: var(--text); cursor: pointer; align-items: center; justify-content: center; }
 .nav-toggle svg { width: 20px; height: 20px; }
 
@@ -180,16 +180,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; }
 /* soft spectral glow behind the cards so the glass has colour to refract */
 .strat-grid::before { content: ""; position: absolute; inset: -16% 8% -16% 8%; z-index: 0; pointer-events: none; filter: blur(46px);
-  background: radial-gradient(50% 70% at 28% 50%, rgba(91,200,255,.16), transparent 70%), radial-gradient(50% 70% at 74% 55%, rgba(155,92,255,.13), transparent 72%); }
+  background: radial-gradient(50% 70% at 28% 50%, rgba(91,200,255,.16), transparent 70%), radial-gradient(50% 70% at 74% 55%, rgba(91,200,255,.13), transparent 72%); }
 .strat-card { position: relative; z-index: 1; display: flex; flex-direction: column;
-  background: linear-gradient(155deg, rgba(255,255,255,.11), rgba(255,255,255,.025));
+  background: linear-gradient(155deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
   backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%);
-  border: 1px solid rgba(255,255,255,.15); border-radius: 18px; padding: 30px; overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 30px 70px -34px rgba(0,0,0,.95);
+  border: 1px solid rgba(255,255,255,.22); border-radius: 18px; padding: 30px; overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 30px 70px -34px rgba(0,0,0,.95);
   transition: transform .28s var(--ease), border-color .28s, background .28s, box-shadow .28s; }
 .strat-card:hover { transform: translateY(-6px); border-color: rgba(91,200,255,.55);
-  background: linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 40px 90px -34px rgba(0,0,0,.95), 0 0 60px -20px rgba(91,200,255,.25); }
+  background: linear-gradient(155deg, rgba(255,255,255,.2), rgba(255,255,255,.08));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 40px 90px -34px rgba(0,0,0,.95), 0 0 60px -20px rgba(91,200,255,.25); }
 
 /* per-card 3D mark (cards.js): a small spectral octahedron above the name */
 .strat-anim { display: block; width: 84px; height: 84px; margin: 2px 0 4px -8px; }
@@ -198,7 +198,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
 .strat-eyebrow { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 14px; letter-spacing: .03em; margin: 10px 0 0; }
-.strat-eyebrow.alpha { color: var(--sp-1); }
+.strat-eyebrow.alpha { color: var(--accent); }
 .strat-eyebrow.gamma { color: var(--accent); }
 .strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 2px 0 0; }
 .strat-card .sub { color: var(--muted); font-size: 15px; margin-top: 11px; flex: 1; }
@@ -282,6 +282,9 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .hero-lab h1 { font-size: clamp(38px, 12vw, 66px); line-height: 1.0; margin-top: 14px; }
   .hero-lab .lead { font-size: 15.5px; margin-top: 18px; max-width: 100%; }
   .hero-actions { margin-top: 26px; }
+  .spectrum-bar .tag { font-size: 10px; }
+  .spectrum-bar .tag.q { left: 0; transform: none; text-align: left; }
+  .spectrum-bar .tag.r { left: auto; right: 0; transform: none; text-align: right; }
 }
 
 /* ============================ Live badge ============================ */
@@ -299,7 +302,7 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
 .contact-points .ic svg { width: 18px; height: 18px; }
 .contact-points b { color: var(--text); display: block; font-size: 15px; }
 .contact-points span { font-size: 14px; color: var(--muted); }
-.form-card { background: linear-gradient(155deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 30px; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 30px 70px -34px rgba(0,0,0,.9); }
+.form-card { background: linear-gradient(155deg, rgba(255,255,255,.16), rgba(255,255,255,.06)); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.22); border-radius: 18px; padding: 30px; box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 30px 70px -34px rgba(0,0,0,.9); }
 .field { margin-bottom: 18px; }
 .field label { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 8px; }
 .field label .req { color: var(--accent); }
