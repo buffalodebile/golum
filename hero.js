@@ -3,41 +3,52 @@
    to a bright hotspot inside, and fans out into a spectrum of individually
    spreading rays toward the lower-left. The cube reorients toward the cursor;
    HUD readouts track it. Bloom gives the beam + spectrum their glow. Degrades
-   gracefully: no WebGL / reduced-motion -> canvas hidden, headline stands alone. */
-
-import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+   gracefully: no WebGL / reduced-motion / mobile -> the static CSS fallback
+   (.no-webgl) shows and the headline stands alone. three.js is loaded lazily so
+   phones never download it. */
 
 const mount = document.getElementById("cube-stage");
 const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Skip the WebGL prism on small / touch screens: the bloom composer is too heavy
+// for many phones. The static CSS fallback fills the area, and the dynamic
+// import() below means three.js is never even fetched there.
+const isMobile = window.matchMedia && window.matchMedia("(max-width: 680px), (pointer: coarse)").matches;
 const setHud = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
 function fail() { if (mount) mount.classList.add("no-webgl"); }
 
-function radialTexture() {
-  const c = document.createElement("canvas"); c.width = c.height = 128;
-  const x = c.getContext("2d");
-  const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
-  g.addColorStop(0, "rgba(255,255,255,1)");
-  g.addColorStop(0.25, "rgba(255,255,255,.9)");
-  g.addColorStop(1, "rgba(255,255,255,0)");
-  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-  return new THREE.CanvasTexture(c);
+if (!mount || isMobile) {
+  fail();
+} else {
+  initHero();
 }
 
-if (mount) {
+async function initHero() {
+  const THREE = await import("three");
+  const { RoundedBoxGeometry } = await import("three/addons/geometries/RoundedBoxGeometry.js");
+  const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+  const { EffectComposer } = await import("three/addons/postprocessing/EffectComposer.js");
+  const { RenderPass } = await import("three/addons/postprocessing/RenderPass.js");
+  const { UnrealBloomPass } = await import("three/addons/postprocessing/UnrealBloomPass.js");
+  const { OutputPass } = await import("three/addons/postprocessing/OutputPass.js");
+
+  function radialTexture() {
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const x = c.getContext("2d");
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.25, "rgba(255,255,255,.9)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+
   let renderer = null;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" }); }
   catch (e) { renderer = null; }
+  if (!renderer) { fail(); return; }
 
-  if (!renderer) {
-    fail();
-  } else try {
+  try {
     const W = () => mount.clientWidth || 1;
     const H = () => mount.clientHeight || 1;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
