@@ -1,9 +1,9 @@
 /* Prisma Capital — hero signature ("la lumière décomposée").
    A near-black glass cube; a thin white beam enters from the top-right, scatters
-   to a bright hotspot inside, and exits as a single continuous rainbow beam
-   toward the lower-left. The cube reorients toward the cursor; HUD readouts track
-   it. Bloom gives the beam + spectrum their glow. Degrades gracefully: no WebGL /
-   reduced-motion -> canvas hidden, headline stands alone. */
+   to a bright hotspot inside, and fans out into a spectrum of individually
+   spreading rays toward the lower-left. The cube reorients toward the cursor;
+   HUD readouts track it. Bloom gives the beam + spectrum their glow. Degrades
+   gracefully: no WebGL / reduced-motion -> canvas hidden, headline stands alone. */
 
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -92,40 +92,26 @@ if (mount) {
     hotspot.position.copy(beamDir.clone().multiplyScalar(-0.55));
     rig.add(hotspot);
 
-    // --- Single continuous rainbow beam exiting toward lower-left ---
-    const STOPS = [[255,40,40],[255,120,20],[255,210,0],[60,220,110],[20,180,250],[80,110,245],[160,90,255]];
-    const spectrum = (t) => {
-      const x = Math.max(0, Math.min(1, t)) * (STOPS.length - 1);
-      const i = Math.floor(x), f = x - i, a = STOPS[i], b = STOPS[Math.min(i + 1, STOPS.length - 1)];
-      return new THREE.Color((a[0]+(b[0]-a[0])*f)/255, (a[1]+(b[1]-a[1])*f)/255, (a[2]+(b[2]-a[2])*f)/255);
-    };
-    // Rainbow beam as ONE textured plane: spectrum across the width, fading along
-    // the length. (Stacking additive colour bands summed to white — this keeps the
-    // colours distinct while staying tight.)
-    const RW = 256, RH = 64;
-    const rc = document.createElement("canvas"); rc.width = RW; rc.height = RH;
-    const rx = rc.getContext("2d");
-    const vg = rx.createLinearGradient(0, 0, 0, RH);
-    ["#ff2d2d", "#ff7a1a", "#ffd400", "#4cd964", "#18b6f6", "#4c6ef5", "#9b5cff"]
-      .forEach((c, i, a) => vg.addColorStop(i / (a.length - 1), c));
-    rx.fillStyle = vg; rx.fillRect(0, 0, RW, RH);
-    rx.globalCompositeOperation = "destination-in";          // fade alpha along length
-    const hg = rx.createLinearGradient(0, 0, RW, 0);
-    hg.addColorStop(0, "rgba(0,0,0,1)"); hg.addColorStop(0.45, "rgba(0,0,0,.7)"); hg.addColorStop(1, "rgba(0,0,0,0)");
-    rx.fillStyle = hg; rx.fillRect(0, 0, RW, RH);
-    const rainbowTex = new THREE.CanvasTexture(rc);
-
-    const LEN = 9, WIDTH = 0.6;
-    const beamGrp = new THREE.Group();
-    beamGrp.position.copy(beamDir.clone().multiplyScalar(1.25));
-    beamGrp.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
-    const rainbow = new THREE.Mesh(
-      new THREE.PlaneGeometry(LEN, WIDTH),
-      new THREE.MeshBasicMaterial({ map: rainbowTex, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
-    );
-    rainbow.position.x = LEN / 2;
-    beamGrp.add(rainbow);
-    rig.add(beamGrp);
+    // --- Emergent spectral fan: each colour spreads as its own ray ---
+    // The dispersion fan widens with the cube's angle; every wavelength gets its
+    // own additive plane so the colours read as distinct rays, not one band.
+    const SPECTRUM = [0xff2d2d, 0xff7a1a, 0xffd400, 0x4cd964, 0x18b6f6, 0x4c6ef5, 0x9b5cff];
+    const RAY_LEN = 9;
+    const fan = new THREE.Group();
+    fan.position.copy(beamDir.clone().multiplyScalar(1.25));
+    fan.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
+    const rays = SPECTRUM.map((hex) => {
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(RAY_LEN, 0.07),
+        new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+      );
+      plane.position.x = RAY_LEN / 2;
+      const holder = new THREE.Group();
+      holder.add(plane);
+      fan.add(holder);
+      return holder;
+    });
+    rig.add(fan);
 
     // --- Bloom ---
     const composer = new EffectComposer(renderer);
@@ -162,6 +148,15 @@ if (mount) {
       const tilt = Math.abs(Math.sin(cube.rotation.y)) * Math.abs(Math.cos(cube.rotation.x));
       beam.material.opacity = 0.78;
       hotspot.material.opacity = 0.85;
+
+      // Fan the spectrum: each ray rotates out from the centre, brighter at the core.
+      const spread = 0.07 + tilt * 0.22;
+      const mid = (rays.length - 1) / 2;
+      rays.forEach((holder, i) => {
+        const k = i - mid;
+        holder.rotation.z = k * spread;
+        holder.children[0].material.opacity = (0.45 + tilt * 0.5) * (1 - Math.abs(k) / (rays.length + 0.5));
+      });
       if (++hudTick % 5 === 0) {
         setHud("hud-refraction", (5.2 + tilt * 4).toFixed(1) + "°");
         setHud("hud-dispersion", (11 + tilt * 9).toFixed(1) + "°");
