@@ -1,46 +1,57 @@
 /* Prisma Capital — hero signature ("la lumière décomposée").
    A near-black glass cube; a thin white beam enters from the top-right, scatters
-   to a bright hotspot inside, and exits as a single continuous rainbow beam
-   toward the lower-left. The cube reorients toward the cursor; HUD readouts track
-   it. Bloom gives the beam + spectrum their glow. Degrades gracefully: no WebGL /
-   reduced-motion -> canvas hidden, headline stands alone. */
-
-import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+   to a bright hotspot inside, and fans out into a spectrum of individually
+   spreading rays toward the lower-left. The cube reorients toward the cursor;
+   HUD readouts track it. Bloom gives the beam + spectrum their glow. Degrades
+   gracefully: no WebGL / reduced-motion / mobile -> the static CSS fallback
+   (.no-webgl) shows and the headline stands alone. three.js is loaded lazily so
+   phones never download it. */
 
 const mount = document.getElementById("cube-stage");
 const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Skip the WebGL prism on small / touch screens: the bloom composer is too heavy
+// for many phones. The static CSS fallback fills the area, and the dynamic
+// import() below means three.js is never even fetched there.
+const isMobile = window.matchMedia && window.matchMedia("(max-width: 680px), (pointer: coarse)").matches;
 const setHud = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
 function fail() { if (mount) mount.classList.add("no-webgl"); }
 
-function radialTexture() {
-  const c = document.createElement("canvas"); c.width = c.height = 128;
-  const x = c.getContext("2d");
-  const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
-  g.addColorStop(0, "rgba(255,255,255,1)");
-  g.addColorStop(0.25, "rgba(255,255,255,.9)");
-  g.addColorStop(1, "rgba(255,255,255,0)");
-  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-  return new THREE.CanvasTexture(c);
+if (!mount || isMobile) {
+  fail();
+} else {
+  initHero();
 }
 
-if (mount) {
+async function initHero() {
+  const THREE = await import("three");
+  const { RoundedBoxGeometry } = await import("three/addons/geometries/RoundedBoxGeometry.js");
+  const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+  const { EffectComposer } = await import("three/addons/postprocessing/EffectComposer.js");
+  const { RenderPass } = await import("three/addons/postprocessing/RenderPass.js");
+  const { UnrealBloomPass } = await import("three/addons/postprocessing/UnrealBloomPass.js");
+  const { OutputPass } = await import("three/addons/postprocessing/OutputPass.js");
+
+  function radialTexture() {
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const x = c.getContext("2d");
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.25, "rgba(255,255,255,.9)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+
   let renderer = null;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" }); }
   catch (e) { renderer = null; }
+  if (!renderer) { fail(); return; }
 
-  if (!renderer) {
-    fail();
-  } else try {
+  try {
     const W = () => mount.clientWidth || 1;
     const H = () => mount.clientHeight || 1;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(W(), H());
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.95;
@@ -92,45 +103,54 @@ if (mount) {
     hotspot.position.copy(beamDir.clone().multiplyScalar(-0.55));
     rig.add(hotspot);
 
-    // --- Single continuous rainbow beam exiting toward lower-left ---
-    const STOPS = [[255,40,40],[255,120,20],[255,210,0],[60,220,110],[20,180,250],[80,110,245],[160,90,255]];
-    const spectrum = (t) => {
-      const x = Math.max(0, Math.min(1, t)) * (STOPS.length - 1);
-      const i = Math.floor(x), f = x - i, a = STOPS[i], b = STOPS[Math.min(i + 1, STOPS.length - 1)];
-      return new THREE.Color((a[0]+(b[0]-a[0])*f)/255, (a[1]+(b[1]-a[1])*f)/255, (a[2]+(b[2]-a[2])*f)/255);
-    };
-    // Rainbow beam as ONE textured plane: spectrum across the width, fading along
-    // the length. (Stacking additive colour bands summed to white — this keeps the
-    // colours distinct while staying tight.)
-    const RW = 256, RH = 64;
-    const rc = document.createElement("canvas"); rc.width = RW; rc.height = RH;
-    const rx = rc.getContext("2d");
-    const vg = rx.createLinearGradient(0, 0, 0, RH);
-    ["#ff2d2d", "#ff7a1a", "#ffd400", "#4cd964", "#18b6f6", "#4c6ef5", "#9b5cff"]
-      .forEach((c, i, a) => vg.addColorStop(i / (a.length - 1), c));
-    rx.fillStyle = vg; rx.fillRect(0, 0, RW, RH);
-    rx.globalCompositeOperation = "destination-in";          // fade alpha along length
-    const hg = rx.createLinearGradient(0, 0, RW, 0);
-    hg.addColorStop(0, "rgba(0,0,0,1)"); hg.addColorStop(0.45, "rgba(0,0,0,.7)"); hg.addColorStop(1, "rgba(0,0,0,0)");
-    rx.fillStyle = hg; rx.fillRect(0, 0, RW, RH);
-    const rainbowTex = new THREE.CanvasTexture(rc);
+    // --- Emergent spectral fan: each colour spreads as its own ray ---
+    // The dispersion fan widens with the cube's angle; every wavelength gets its
+    // own additive plane so the colours read as distinct rays, not one band.
+    // A soft cross-beam falloff (bright core -> transparent edges) gives each ray
+    // a coloured glow rather than a hard line.
+    function beamTexture() {
+      const TW = 256, TH = 64;
+      const c = document.createElement("canvas"); c.width = TW; c.height = TH;
+      const x = c.getContext("2d");
+      const vg = x.createLinearGradient(0, 0, 0, TH);     // glow across the width
+      vg.addColorStop(0.0, "rgba(255,255,255,0)");
+      vg.addColorStop(0.42, "rgba(255,255,255,.55)");
+      vg.addColorStop(0.5, "rgba(255,255,255,1)");
+      vg.addColorStop(0.58, "rgba(255,255,255,.55)");
+      vg.addColorStop(1.0, "rgba(255,255,255,0)");
+      x.fillStyle = vg; x.fillRect(0, 0, TW, TH);
+      x.globalCompositeOperation = "destination-in";       // fade alpha along length
+      const hg = x.createLinearGradient(0, 0, TW, 0);
+      hg.addColorStop(0, "rgba(0,0,0,1)"); hg.addColorStop(0.5, "rgba(0,0,0,.8)"); hg.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = hg; x.fillRect(0, 0, TW, TH);
+      return new THREE.CanvasTexture(c);
+    }
+    const beamTex = beamTexture();
 
-    const LEN = 9, WIDTH = 0.78;
-    const beamGrp = new THREE.Group();
-    beamGrp.position.copy(beamDir.clone().multiplyScalar(1.25));
-    beamGrp.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
-    const rainbow = new THREE.Mesh(
-      new THREE.PlaneGeometry(LEN, WIDTH),
-      new THREE.MeshBasicMaterial({ map: rainbowTex, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
-    );
-    rainbow.position.x = LEN / 2;
-    beamGrp.add(rainbow);
-    rig.add(beamGrp);
+    // Pale, low-contrast spectrum (each hue mixed toward white) so the rays read
+    // as soft tinted light rather than saturated colour bars.
+    const SPECTRUM = [0xff8c8c, 0xffb681, 0xffe772, 0x9deaaa, 0x80d7fa, 0x9daffa, 0xc8a5ff];
+    const RAY_LEN = 9;
+    const fan = new THREE.Group();
+    fan.position.copy(beamDir.clone().multiplyScalar(1.25));   // emerge from behind the exit face
+    fan.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
+    const rays = SPECTRUM.map((hex) => {
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(RAY_LEN, 0.34),
+        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+      );
+      plane.position.x = RAY_LEN / 2;
+      const holder = new THREE.Group();
+      holder.add(plane);
+      fan.add(holder);
+      return holder;
+    });
+    rig.add(fan);
 
     // --- Bloom ---
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 0.8, 0.7, 0.1);
+    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 0.8, 0.75, 0.12);
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
 
@@ -148,10 +168,8 @@ if (mount) {
       const w = W(), h = H(), aspect = w / h;
       renderer.setSize(w, h); composer.setSize(w, h);
       camera.aspect = aspect; camera.updateProjectionMatrix();
-      const desktop = aspect > 1.05;
-      rig.position.set(desktop ? 1.95 : 0, desktop ? 0.15 : 0.75, 0);
-      rig.scale.setScalar(desktop ? 0.58 : 0.46);
-      rig.rotation.z = desktop ? 0 : -0.85;   // point the rainbow down into the tall mobile viewport
+      rig.position.set(aspect > 1.05 ? 1.95 : 0, aspect > 1.05 ? 0.15 : 0.15, 0);
+      rig.scale.setScalar(aspect > 1.05 ? 0.58 : 0.42);
     }
     layout();
     window.addEventListener("resize", layout);
@@ -164,6 +182,16 @@ if (mount) {
       const tilt = Math.abs(Math.sin(cube.rotation.y)) * Math.abs(Math.cos(cube.rotation.x));
       beam.material.opacity = 0.78;
       hotspot.material.opacity = 0.85;
+
+      // Fan the spectrum: each ray rotates out from the centre, brighter at the core.
+      // Keep the cone tight even at full tilt so it never opens past a gentle fan.
+      const spread = 0.04 + tilt * 0.085;
+      const mid = (rays.length - 1) / 2;
+      rays.forEach((holder, i) => {
+        const k = i - mid;
+        holder.rotation.z = k * spread;
+        holder.children[0].material.opacity = (0.3 + tilt * 0.36) * (1 - Math.abs(k) / (rays.length + 0.5));
+      });
       if (++hudTick % 5 === 0) {
         setHud("hud-refraction", (5.2 + tilt * 4).toFixed(1) + "°");
         setHud("hud-dispersion", (11 + tilt * 9).toFixed(1) + "°");
@@ -171,10 +199,22 @@ if (mount) {
       composer.render();
     }
     function loop() { t += 0.0038; render(); raf = requestAnimationFrame(loop); }
-    if (reduce) render(); else raf = requestAnimationFrame(loop);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = 0; }
-      else if (!reduce && !raf) raf = requestAnimationFrame(loop);
-    });
+
+    // Only run the loop when the hero is actually visible: pause when the tab is
+    // hidden or the section is scrolled out of view. The composer + bloom pass is
+    // the expensive part, so not rendering it off-screen keeps the rest of the
+    // page smooth on lower-end devices.
+    let inView = true;
+    function start() { if (!reduce && !raf && inView && !document.hidden) raf = requestAnimationFrame(loop); }
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; }
+
+    if (reduce) render(); else start();
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries[0].isIntersecting;
+        if (inView) start(); else stop();
+      }, { threshold: 0.01 }).observe(mount);
+    }
   } catch (e) { fail(); }
 }
