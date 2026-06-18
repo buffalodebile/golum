@@ -40,7 +40,7 @@ if (mount) {
   } else try {
     const W = () => mount.clientWidth || 1;
     const H = () => mount.clientHeight || 1;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(W(), H());
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.95;
@@ -116,21 +116,19 @@ if (mount) {
     }
     const beamTex = beamTexture();
 
-    const SPECTRUM = [0xff2d2d, 0xff7a1a, 0xffd400, 0x4cd964, 0x18b6f6, 0x4c6ef5, 0x9b5cff];
+    // Pale, low-contrast spectrum (each hue mixed toward white) so the rays read
+    // as soft tinted light rather than saturated colour bars.
+    const SPECTRUM = [0xff8c8c, 0xffb681, 0xffe772, 0x9deaaa, 0x80d7fa, 0x9daffa, 0xc8a5ff];
     const RAY_LEN = 9;
     const fan = new THREE.Group();
-    // Converge inside the cube (near the entry hotspot) so the colours appear to
-    // split from within the glass, not from behind the exit face.
-    fan.position.copy(beamDir.clone().multiplyScalar(0.2));
+    fan.position.copy(beamDir.clone().multiplyScalar(1.25));   // emerge from behind the exit face
     fan.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
     const rays = SPECTRUM.map((hex) => {
       const plane = new THREE.Mesh(
         new THREE.PlaneGeometry(RAY_LEN, 0.34),
-        // depthTest off so the rays glow over/through the glass from the inside.
-        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, side: THREE.DoubleSide })
+        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
       );
       plane.position.x = RAY_LEN / 2;
-      plane.renderOrder = 5;
       const holder = new THREE.Group();
       holder.add(plane);
       fan.add(holder);
@@ -190,10 +188,22 @@ if (mount) {
       composer.render();
     }
     function loop() { t += 0.0038; render(); raf = requestAnimationFrame(loop); }
-    if (reduce) render(); else raf = requestAnimationFrame(loop);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = 0; }
-      else if (!reduce && !raf) raf = requestAnimationFrame(loop);
-    });
+
+    // Only run the loop when the hero is actually visible: pause when the tab is
+    // hidden or the section is scrolled out of view. The composer + bloom pass is
+    // the expensive part, so not rendering it off-screen keeps the rest of the
+    // page smooth on lower-end devices.
+    let inView = true;
+    function start() { if (!reduce && !raf && inView && !document.hidden) raf = requestAnimationFrame(loop); }
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; }
+
+    if (reduce) render(); else start();
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries[0].isIntersecting;
+        if (inView) start(); else stop();
+      }, { threshold: 0.01 }).observe(mount);
+    }
   } catch (e) { fail(); }
 }
