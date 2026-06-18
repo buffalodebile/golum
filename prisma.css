@@ -32,6 +32,8 @@
   --sp-1: #FF2D2D; --sp-2: #FF7A1A; --sp-3: #FFD400; --sp-4: #4CD964;
   --sp-5: #18B6F6; --sp-6: #4C6EF5; --sp-7: #9B5CFF;
   --spectrum: linear-gradient(90deg, var(--sp-1), var(--sp-2), var(--sp-3), var(--sp-4), var(--sp-5), var(--sp-6), var(--sp-7));
+  /* risk scale: low risk = cool/violet -> high risk = red (reverse of the prism order) */
+  --risk-spectrum: linear-gradient(90deg, var(--sp-7), var(--sp-6), var(--sp-5), var(--sp-4), var(--sp-3), var(--sp-2), var(--sp-1));
 
   --font-display: "Cormorant", "Cormorant Garamond", Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -171,6 +173,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .feature .gi svg { width: 100%; height: 100%; }
 .feature h3 { font-family: var(--font-display); font-size: 24px; font-weight: 600; }
 .feature p { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+.feature p a { color: var(--accent); font-weight: 500; }
+.feature p a:hover { text-decoration: underline; }
 
 /* Strategy cards */
 .strat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; }
@@ -199,17 +203,23 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-kpis .v { font-family: var(--font-mono); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .strat-kpis .v.pos { color: var(--green); } .strat-kpis .v.neg { color: var(--red); }
 .strat-kpis .l { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-.strat-link { margin-top: 22px; }
+/* CTA button on each strategy card (the whole card is the link; this is the affordance) */
+.strat-link { margin-top: 24px; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); font-weight: 600; font-size: 14.5px;
+  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease); }
+.strat-link svg { width: 17px; height: 17px; transition: transform .2s var(--ease); }
+.strat-card:hover .strat-link { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.strat-card:hover .strat-link svg { transform: translateX(3px); }
 
 /* Risk-spectrum band — the refraction metaphor, the one place colour is "earned" */
 .spectrum-rail { max-width: 860px; }
-.spectrum-bar { position: relative; height: 3px; border-radius: 999px; margin: 64px 0 16px; background: var(--spectrum); }
+.spectrum-bar { position: relative; height: 3px; border-radius: 999px; margin: 64px 0 16px; background: var(--risk-spectrum); }
 .spectrum-bar .node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--text); }
 .spectrum-bar .node.q { left: 60%; border-color: var(--accent); }
-.spectrum-bar .node.r { left: 90%; border-color: var(--sp-7); }
+.spectrum-bar .node.r { left: 90%; border-color: var(--sp-1); }
 .spectrum-bar .tag { position: absolute; top: -46px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-align: center; white-space: nowrap; }
 .spectrum-bar .tag small { display: block; color: var(--muted); font-size: 10.5px; letter-spacing: .08em; margin-top: 3px; }
-.spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-7); }
+.spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-1); }
 .spectrum-ends { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
 /* Contact CTA band */
