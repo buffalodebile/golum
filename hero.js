@@ -95,6 +95,27 @@ if (mount) {
     // --- Emergent spectral fan: each colour spreads as its own ray ---
     // The dispersion fan widens with the cube's angle; every wavelength gets its
     // own additive plane so the colours read as distinct rays, not one band.
+    // A soft cross-beam falloff (bright core -> transparent edges) gives each ray
+    // a coloured glow rather than a hard line.
+    function beamTexture() {
+      const TW = 256, TH = 64;
+      const c = document.createElement("canvas"); c.width = TW; c.height = TH;
+      const x = c.getContext("2d");
+      const vg = x.createLinearGradient(0, 0, 0, TH);     // glow across the width
+      vg.addColorStop(0.0, "rgba(255,255,255,0)");
+      vg.addColorStop(0.42, "rgba(255,255,255,.55)");
+      vg.addColorStop(0.5, "rgba(255,255,255,1)");
+      vg.addColorStop(0.58, "rgba(255,255,255,.55)");
+      vg.addColorStop(1.0, "rgba(255,255,255,0)");
+      x.fillStyle = vg; x.fillRect(0, 0, TW, TH);
+      x.globalCompositeOperation = "destination-in";       // fade alpha along length
+      const hg = x.createLinearGradient(0, 0, TW, 0);
+      hg.addColorStop(0, "rgba(0,0,0,1)"); hg.addColorStop(0.5, "rgba(0,0,0,.8)"); hg.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = hg; x.fillRect(0, 0, TW, TH);
+      return new THREE.CanvasTexture(c);
+    }
+    const beamTex = beamTexture();
+
     const SPECTRUM = [0xff2d2d, 0xff7a1a, 0xffd400, 0x4cd964, 0x18b6f6, 0x4c6ef5, 0x9b5cff];
     const RAY_LEN = 9;
     const fan = new THREE.Group();
@@ -102,8 +123,8 @@ if (mount) {
     fan.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
     const rays = SPECTRUM.map((hex) => {
       const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(RAY_LEN, 0.07),
-        new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+        new THREE.PlaneGeometry(RAY_LEN, 0.34),
+        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
       );
       plane.position.x = RAY_LEN / 2;
       const holder = new THREE.Group();
@@ -116,7 +137,7 @@ if (mount) {
     // --- Bloom ---
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 0.8, 0.7, 0.1);
+    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 1.15, 0.9, 0.0);
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
 
@@ -150,12 +171,13 @@ if (mount) {
       hotspot.material.opacity = 0.85;
 
       // Fan the spectrum: each ray rotates out from the centre, brighter at the core.
-      const spread = 0.07 + tilt * 0.22;
+      // Keep the cone tight even at full tilt so it never opens past a gentle fan.
+      const spread = 0.04 + tilt * 0.085;
       const mid = (rays.length - 1) / 2;
       rays.forEach((holder, i) => {
         const k = i - mid;
         holder.rotation.z = k * spread;
-        holder.children[0].material.opacity = (0.45 + tilt * 0.5) * (1 - Math.abs(k) / (rays.length + 0.5));
+        holder.children[0].material.opacity = (0.4 + tilt * 0.45) * (1 - Math.abs(k) / (rays.length + 0.5));
       });
       if (++hudTick % 5 === 0) {
         setHud("hud-refraction", (5.2 + tilt * 4).toFixed(1) + "°");
