@@ -119,14 +119,18 @@ if (mount) {
     const SPECTRUM = [0xff2d2d, 0xff7a1a, 0xffd400, 0x4cd964, 0x18b6f6, 0x4c6ef5, 0x9b5cff];
     const RAY_LEN = 9;
     const fan = new THREE.Group();
-    fan.position.copy(beamDir.clone().multiplyScalar(1.25));
+    // Converge inside the cube (near the entry hotspot) so the colours appear to
+    // split from within the glass, not from behind the exit face.
+    fan.position.copy(beamDir.clone().multiplyScalar(0.2));
     fan.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), beamDir.clone());
     const rays = SPECTRUM.map((hex) => {
       const plane = new THREE.Mesh(
         new THREE.PlaneGeometry(RAY_LEN, 0.34),
-        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+        // depthTest off so the rays glow over/through the glass from the inside.
+        new THREE.MeshBasicMaterial({ map: beamTex, color: hex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, side: THREE.DoubleSide })
       );
       plane.position.x = RAY_LEN / 2;
+      plane.renderOrder = 5;
       const holder = new THREE.Group();
       holder.add(plane);
       fan.add(holder);
@@ -137,7 +141,7 @@ if (mount) {
     // --- Bloom ---
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 1.15, 0.9, 0.0);
+    const bloom = new UnrealBloomPass(new THREE.Vector2(W(), H()), 0.8, 0.75, 0.12);
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
 
@@ -177,7 +181,7 @@ if (mount) {
       rays.forEach((holder, i) => {
         const k = i - mid;
         holder.rotation.z = k * spread;
-        holder.children[0].material.opacity = (0.4 + tilt * 0.45) * (1 - Math.abs(k) / (rays.length + 0.5));
+        holder.children[0].material.opacity = (0.3 + tilt * 0.36) * (1 - Math.abs(k) / (rays.length + 0.5));
       });
       if (++hudTick % 5 === 0) {
         setHud("hud-refraction", (5.2 + tilt * 4).toFixed(1) + "°");
