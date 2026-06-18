@@ -190,7 +190,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 /* per-card 3D mark (cards.js): a small spectral octahedron above the name */
 .strat-anim { display: block; width: 84px; height: 84px; margin: 2px 0 4px -8px; }
 .strat-anim canvas { display: block; width: 84px !important; height: 84px !important; }
-.strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); }
+.strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); margin-bottom: 16px; }
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
 .strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 14px 0 0; }
