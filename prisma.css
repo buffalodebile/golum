@@ -258,6 +258,14 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .footer-inner { grid-template-columns: 1fr; gap: 26px; }
   .hero-beam { width: 70%; right: -6%; }
   .hero-scrim { background: linear-gradient(180deg, rgba(6,8,14,.35) 0%, rgba(6,8,14,.86) 46%, rgba(6,8,14,.96) 100%); }
+  /* Headline: drop the desktop clamp floor so it can't overflow narrow screens,
+     and let the line break naturally instead of the forced desktop <br>. */
+  .br-lg { display: none; }
+  .hero-lab { min-height: auto; }
+  .hero-lab .container { padding-top: 8vh; padding-bottom: 14vh; }
+  .hero-lab h1 { font-size: clamp(38px, 12vw, 66px); line-height: 1.0; margin-top: 14px; }
+  .hero-lab .lead { font-size: 15.5px; margin-top: 18px; max-width: 100%; }
+  .hero-actions { margin-top: 26px; }
 }
 
 /* ============================ Live badge ============================ */
