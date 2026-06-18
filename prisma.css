@@ -32,8 +32,6 @@
   --sp-1: #FF2D2D; --sp-2: #FF7A1A; --sp-3: #FFD400; --sp-4: #4CD964;
   --sp-5: #18B6F6; --sp-6: #4C6EF5; --sp-7: #9B5CFF;
   --spectrum: linear-gradient(90deg, var(--sp-1), var(--sp-2), var(--sp-3), var(--sp-4), var(--sp-5), var(--sp-6), var(--sp-7));
-  /* risk scale: low risk = cool/violet -> high risk = red (reverse of the prism order) */
-  --risk-spectrum: linear-gradient(90deg, var(--sp-7), var(--sp-6), var(--sp-5), var(--sp-4), var(--sp-3), var(--sp-2), var(--sp-1));
 
   --font-display: "Cormorant", "Cormorant Garamond", Georgia, serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -124,7 +122,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .nav-links a { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 13px; border-radius: 8px; transition: color .15s, background .15s; }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.04); }
 .nav-links a.active { color: var(--accent); }
-.nav-cta { margin-left: 8px; padding: 9px 17px; font-size: 14px; }
+.nav-cta { margin-left: 8px; padding: 9px 17px; font-size: 14px; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.3); color: #fff; }
 .nav-toggle { display: none; margin-left: auto; width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line-2); color: var(--text); cursor: pointer; align-items: center; justify-content: center; }
 .nav-toggle svg { width: 20px; height: 20px; }
 
@@ -171,65 +169,51 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; }
 .feature .gi { width: 30px; height: 30px; color: var(--accent); margin-bottom: 18px; opacity: .9; }
 .feature .gi svg { width: 100%; height: 100%; }
-.feature h3 { font-family: var(--font-sans); font-size: 19px; font-weight: 700; letter-spacing: .005em; }
-.feature p { color: var(--text-2); font-size: 16px; line-height: 1.6; margin-top: 9px; }
-.feature p a { color: var(--accent); font-weight: 500; }
-.feature p a:hover { text-decoration: underline; }
+.feature h3 { font-family: var(--font-display); font-size: 24px; font-weight: 600; }
+.feature p { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
 
 /* Strategy cards */
 .strat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; }
 /* soft spectral glow behind the cards so the glass has colour to refract */
 .strat-grid::before { content: ""; position: absolute; inset: -16% 8% -16% 8%; z-index: 0; pointer-events: none; filter: blur(46px);
-  background: radial-gradient(50% 70% at 28% 50%, rgba(91,200,255,.16), transparent 70%), radial-gradient(50% 70% at 74% 55%, rgba(155,92,255,.13), transparent 72%); }
+  background: radial-gradient(55% 72% at 30% 46%, rgba(91,200,255,.12), transparent 72%), radial-gradient(55% 72% at 72% 60%, rgba(91,200,255,.09), transparent 74%); }
 .strat-card { position: relative; z-index: 1; display: flex; flex-direction: column;
-  background: linear-gradient(155deg, rgba(255,255,255,.11), rgba(255,255,255,.025));
+  background: linear-gradient(160deg, rgba(255,255,255,.085), rgba(255,255,255,.05));
   backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%);
   border: 1px solid rgba(255,255,255,.15); border-radius: 18px; padding: 30px; overflow: hidden;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 30px 70px -34px rgba(0,0,0,.95);
   transition: transform .28s var(--ease), border-color .28s, background .28s, box-shadow .28s; }
 .strat-card:hover { transform: translateY(-6px); border-color: rgba(91,200,255,.55);
-  background: linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+  background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,.07));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 40px 90px -34px rgba(0,0,0,.95), 0 0 60px -20px rgba(91,200,255,.25); }
 
 /* per-card 3D mark (cards.js): a small spectral octahedron above the name */
 .strat-anim { display: block; width: 84px; height: 84px; margin: 2px 0 4px -8px; }
 .strat-anim canvas { display: block; width: 84px !important; height: 84px !important; }
-.strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); margin-bottom: 16px; }
+.strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); }
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
-.strat-eyebrow { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 14px; letter-spacing: .03em; margin: 10px 0 0; }
-.strat-eyebrow.alpha { color: var(--sp-1); }
-.strat-eyebrow.gamma { color: var(--accent); }
-.strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 2px 0 0; }
+.strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 14px 0 0; }
 .strat-card .sub { color: var(--muted); font-size: 15px; margin-top: 11px; flex: 1; }
 .strat-kpis { display: flex; gap: 26px; margin: 22px 0 4px; flex-wrap: wrap; }
 .strat-kpis .v { font-family: var(--font-mono); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .strat-kpis .v.pos { color: var(--green); } .strat-kpis .v.neg { color: var(--red); }
 .strat-kpis .l { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-/* CTA button on each strategy card (the whole card is the link; this is the affordance) */
-.strat-link { margin-top: 24px; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 20px; border-radius: 999px; border: 1px solid rgba(91,200,255,.42); background: rgba(91,200,255,.13); color: var(--accent); font-weight: 600; font-size: 14.5px;
-  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease); }
-.strat-link svg { width: 17px; height: 17px; transition: transform .2s var(--ease); }
-.strat-card:hover .strat-link { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.strat-card:hover .strat-link svg { transform: translateX(3px); }
+.strat-link { margin-top: 22px; }
 
 /* Risk-spectrum band — the refraction metaphor, the one place colour is "earned" */
 .spectrum-rail { max-width: 860px; }
-.spectrum-bar { position: relative; height: 3px; border-radius: 999px; margin: 64px 0 16px; background: var(--risk-spectrum); }
+.spectrum-bar { position: relative; height: 3px; border-radius: 999px; margin: 64px 0 16px; background: var(--spectrum); }
 .spectrum-bar .node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--text); }
 .spectrum-bar .node.q { left: 60%; border-color: var(--accent); }
-.spectrum-bar .node.r { left: 90%; border-color: var(--sp-1); }
+.spectrum-bar .node.r { left: 90%; border-color: var(--sp-7); }
 .spectrum-bar .tag { position: absolute; top: -46px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-align: center; white-space: nowrap; }
 .spectrum-bar .tag small { display: block; color: var(--muted); font-size: 10.5px; letter-spacing: .08em; margin-top: 3px; }
-.spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-1); }
+.spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-7); }
 .spectrum-ends { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
 /* Contact CTA band */
-.cta-band .cta-card { position: relative; border: 1px solid rgba(255,255,255,.22); border-radius: 18px; padding: 66px 32px; text-align: center; overflow: hidden;
-  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
-  backdrop-filter: blur(26px) saturate(150%); -webkit-backdrop-filter: blur(26px) saturate(150%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 30px 70px -34px rgba(0,0,0,.9); }
+.cta-band .cta-card { position: relative; border: 1px solid rgba(255,255,255,.09); border-radius: 18px; padding: 66px 32px; text-align: center; overflow: hidden; background: rgba(255,255,255,.03); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
 .cta-card h2 { font-size: clamp(26px, 4vw, 42px); max-width: 18ch; margin: 0 auto; }
 .cta-card p { color: var(--text-2); font-size: 17px; max-width: 520px; margin: 16px auto 28px; }
 
@@ -274,14 +258,10 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .footer-inner { grid-template-columns: 1fr; gap: 26px; }
   .hero-beam { width: 70%; right: -6%; }
   .hero-scrim { background: linear-gradient(180deg, rgba(6,8,14,.35) 0%, rgba(6,8,14,.86) 46%, rgba(6,8,14,.96) 100%); }
-  /* Headline: drop the desktop clamp floor so it can't overflow narrow screens,
-     and let the line break naturally instead of the forced desktop <br>. */
-  .br-lg { display: none; }
-  .hero-lab { min-height: auto; }
-  .hero-lab .container { padding-top: 8vh; padding-bottom: 14vh; }
-  .hero-lab h1 { font-size: clamp(38px, 12vw, 66px); line-height: 1.0; margin-top: 14px; }
-  .hero-lab .lead { font-size: 15.5px; margin-top: 18px; max-width: 100%; }
-  .hero-actions { margin-top: 26px; }
+  /* keep the two spectrum labels from overlapping on narrow screens */
+  .spectrum-bar .tag { font-size: 10px; }
+  .spectrum-bar .tag.q { left: 0; transform: none; text-align: left; }
+  .spectrum-bar .tag.r { left: auto; right: 0; transform: none; text-align: right; }
 }
 
 /* ============================ Live badge ============================ */
@@ -299,12 +279,11 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
 .contact-points .ic svg { width: 18px; height: 18px; }
 .contact-points b { color: var(--text); display: block; font-size: 15px; }
 .contact-points span { font-size: 14px; color: var(--muted); }
-.form-card { background: linear-gradient(155deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 30px; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 30px 70px -34px rgba(0,0,0,.9); }
+.form-card { background: linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.025)); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.13); border-radius: 18px; padding: 30px; box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 30px 70px -34px rgba(0,0,0,.9); }
 .field { margin-bottom: 18px; }
 .field label { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 8px; }
 .field label .req { color: var(--accent); }
-.field input, .field select, .field textarea { width: 100%; background: rgba(255,255,255,.07); color: var(--text); border: 1px solid rgba(255,255,255,.22); border-radius: 11px; padding: 12px 14px; font-size: 15px; font-family: var(--font-sans); line-height: 1.4; transition: border-color .15s, box-shadow .15s, background .15s; color-scheme: dark; }
-.field input:hover, .field select:hover, .field textarea:hover { border-color: rgba(255,255,255,.34); background: rgba(255,255,255,.09); }
+.field input, .field select, .field textarea { width: 100%; background: rgba(0,0,0,.28); color: var(--text); border: 1px solid var(--line-2); border-radius: 11px; padding: 12px 14px; font-size: 15px; font-family: var(--font-sans); line-height: 1.4; transition: border-color .15s, box-shadow .15s; color-scheme: dark; }
 .field textarea { min-height: 130px; resize: vertical; }
 .field input::placeholder, .field textarea::placeholder { color: #6b7180; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,200,255,.18); }

@@ -292,7 +292,7 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 .rg-track { display: flex; gap: 4px; }
 .rg-seg {
   flex: 1; height: 10px; border-radius: 3px;
-  background: var(--risk-spectrum, linear-gradient(100deg, #9B5CFF, #4C6EF5, #18B6F6, #4CD964, #FFD400, #FF7A1A, #FF2D2D));
+  background: var(--spectrum, linear-gradient(100deg, #22D3EE, #6366F1, #EC4899));
   background-size: 1000% 100%;
   background-position: calc(var(--i) / 9 * 100%) 0;
   opacity: .15; transition: opacity .3s ease;

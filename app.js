@@ -42,6 +42,7 @@
       ["Live return", fmtPct(s.live_total_pct), s.live_total_pct >= 0 ? "pos" : "neg"],
       ["Months live", String(s.live_months), "accent"],
       ["Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
+      ["Sharpe (model)", (s.backtest_sharpe != null ? s.backtest_sharpe.toFixed(2) : "—"), "accent"],
       ["Model CAGR (" + s.backtest_years.toFixed(0) + "y)", fmtPct(s.backtest_cagr_pct), ""],
     ].map(([label, value, cls]) =>
       `<div class="stat"><div class="value ${cls}">${value}</div><div class="label">${label}</div></div>`
@@ -324,8 +325,8 @@
     const el = document.getElementById(elId);
     if (!el) return;
     const lvl = Math.max(1, Math.min(10, Math.round(level)));
-    const scoreColor = lvl >= 8 ? "var(--sp-1, #FF2D2D)"
-      : lvl >= 5 ? "var(--sp-6, #4C6EF5)" : "var(--accent, #5BC8FF)";
+    const scoreColor = lvl >= 8 ? "var(--magenta, #EC4899)"
+      : lvl >= 5 ? "var(--indigo, #6366F1)" : "var(--accent, #00CED1)";
     let segs = "";
     for (let i = 0; i < 10; i++) {
       segs += `<span class="rg-seg${i < lvl ? " on" : ""}" style="--i:${i}"></span>`;
@@ -358,7 +359,7 @@
     }
     const fmtW = (w) => (w * 100).toFixed(1) + "%";
     const fmtG = (g) => (g == null ? "&mdash;" : (g >= 0 ? "+" : "") + g.toFixed(1) + "%");
-    let html = "<thead><tr><th>Ticker</th><th>Company</th><th>Sector</th>" +
+    let html = "<thead><tr><th>Ticker</th><th>Company</th><th class='sec'>Sector</th>" +
       "<th class='num'>Weight</th><th class='num'>Growth</th></tr></thead><tbody>";
     for (const h of H) {
       const g = h.growth_pct;
