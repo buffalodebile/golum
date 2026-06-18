@@ -28,4 +28,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://buffalodebile.github.io/golum/sitemap.xml
+Sitemap: https://www.prisma-capital.xyz/sitemap.xml

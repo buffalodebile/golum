@@ -8,7 +8,7 @@
 ## Strategies
 
 ### Nasdaq x Gold Rotation (higher risk)
-URL: https://buffalodebile.github.io/golum/rotation.html
+URL: https://www.prisma-capital.xyz/rotation.html
 - Rotates between leveraged Nasdaq-100 and Gold: trend-following, volatility-based
   exposure scaling, and a protective trailing stop.
 - High risk / high reward. Backtested over ~40 years of index data, with a high
@@ -16,14 +16,14 @@ URL: https://buffalodebile.github.io/golum/rotation.html
 - Can be copied on eToro: https://www.etoro.com/people/pauladrienb
 
 ### Quality (lower risk)
-URL: https://buffalodebile.github.io/golum/quality.html
+URL: https://www.prisma-capital.xyz/quality.html
 - Buys financially strong, low-debt companies with healthy growth at a reasonable
   price, in a focused, equal-weighted basket of US stocks, rebalanced twice a year.
 - Lower risk. Backtested since 2010. Quality investing favours consistently
   profitable, financially solid businesses bought at sensible valuations.
 
 ## Contact
-URL: https://buffalodebile.github.io/golum/contact.html
+URL: https://www.prisma-capital.xyz/contact.html
 - For setting up or copying the strategies, or any question.
 
 Author: Paul Adrien. Not investment advice. Past and simulated performance do not
