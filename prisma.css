@@ -205,7 +205,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-kpis .l { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
 /* CTA button on each strategy card (the whole card is the link; this is the affordance) */
 .strat-link { margin-top: 24px; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text); font-weight: 600; font-size: 14.5px;
+  padding: 11px 20px; border-radius: 999px; border: 1px solid rgba(91,200,255,.42); background: rgba(91,200,255,.13); color: var(--accent); font-weight: 600; font-size: 14.5px;
   transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease); }
 .strat-link svg { width: 17px; height: 17px; transition: transform .2s var(--ease); }
 .strat-card:hover .strat-link { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
