@@ -213,7 +213,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .spectrum-ends { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
 /* Contact CTA band */
-.cta-band .cta-card { position: relative; border: 1px solid rgba(255,255,255,.09); border-radius: 18px; padding: 66px 32px; text-align: center; overflow: hidden; background: rgba(255,255,255,.03); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.cta-band .cta-card { position: relative; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 66px 32px; text-align: center; overflow: hidden; background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
 .cta-card h2 { font-size: clamp(26px, 4vw, 42px); max-width: 18ch; margin: 0 auto; }
 .cta-card p { color: var(--text-2); font-size: 17px; max-width: 520px; margin: 16px auto 28px; }
 
