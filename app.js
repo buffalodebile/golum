@@ -45,7 +45,7 @@
       ["Months live", String(s.live_months), "accent"],
       ["Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
       ["Model CAGR (" + s.backtest_years.toFixed(0) + "y)", fmtPct(s.backtest_cagr_pct), ""],
-      ["Sharpe ratio", sharpe, "accent"],
+      ["Model Sharpe (" + s.backtest_years.toFixed(0) + "y)", sharpe, "accent"],
     ].map(([label, value, cls]) =>
       `<div class="stat"><div class="value ${cls}">${value}</div><div class="label">${label}</div></div>`
     ).join("");
@@ -389,7 +389,7 @@
     scaleToggle: "scale-toggle-q", heatmap: "heatmap-q", ddCallout: null,
     risk: 6, riskGauge: "risk-gauge-q",
   };
-  // Balanced — benchmarked against the S&P 500.
+  // Balance Equilibrium — benchmarked against the S&P 500.
   const S_IDS = {
     stats: "stats-band-s", updatedHero: "updated-hero-s",
     equity: "equity-chart-s", drawdown: "drawdown-chart-s", periodBar: "period-bar-s",
