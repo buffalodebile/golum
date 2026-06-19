@@ -218,8 +218,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); margin-bottom: 16px; }
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
-/* "Simulé" tag — paper-tracked card, amber so it never reads as the green LIVE state */
-.strat-card .sim-badge { position: absolute; top: 22px; right: 22px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; color: #f4b13b; border: 1px solid rgba(244,177,59,.42); background: rgba(244,177,59,.1); }
 .strat-eyebrow { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 14px; letter-spacing: .03em; margin: 10px 0 0; }
 .strat-eyebrow.alpha { color: var(--accent); }
 .strat-eyebrow.gamma { color: var(--accent); }

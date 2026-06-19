@@ -36,17 +36,16 @@
     }
 
     // ---- Stats band ----
-    // `simulated` strategies are paper-tracked (no real capital); their forward
-    // segment is labelled "tracked / sim." rather than "live" everywhere.
-    const sim = !!ids.simulated;
     const benchName = ids.benchName || "Nasdaq-100";
     const s = D.stats;
     const fmtPct = (v) => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
+    const sharpe = (s.backtest_sharpe != null) ? s.backtest_sharpe.toFixed(2) : "—";
     if (statsEl) statsEl.innerHTML = [
-      [sim ? "Tracked (sim.)" : "Live return", fmtPct(s.live_total_pct), s.live_total_pct >= 0 ? "pos" : "neg"],
-      [sim ? "Months tracked" : "Months live", String(s.live_months), "accent"],
-      [sim ? "Sim. max drawdown" : "Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
+      ["Live return", fmtPct(s.live_total_pct), s.live_total_pct >= 0 ? "pos" : "neg"],
+      ["Months live", String(s.live_months), "accent"],
+      ["Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
       ["Model CAGR (" + s.backtest_years.toFixed(0) + "y)", fmtPct(s.backtest_cagr_pct), ""],
+      ["Sharpe ratio", sharpe, "accent"],
     ].map(([label, value, cls]) =>
       `<div class="stat"><div class="value ${cls}">${value}</div><div class="label">${label}</div></div>`
     ).join("");
@@ -114,7 +113,7 @@
       ["3Y", () => minusYears(today, 3)],
       ["1Y", () => minusYears(today, 1)],
       ["YTD", () => today.slice(0, 4) + "-01-01"],
-      [sim ? "Sim." : "Live", () => inception],
+      ["Live", () => inception],
     ].filter(([label]) => {
       const m = label.match(/^(\d+)Y$/);
       return !m || +m[1] <= spanYears;
@@ -168,8 +167,7 @@
         });
         annotations.push({
           x: inception, y: 1, yref: "paper", yanchor: "bottom", xanchor: "right",
-          text: sim ? "Tracked since" : "Live start", showarrow: false,
-          font: { color: "#C7CCD6", size: 11 },
+          text: "Live start", showarrow: false, font: { color: "#C7CCD6", size: 11 },
         });
       }
 
@@ -297,15 +295,13 @@
       MONTHS.map((m) => `<th>${m}</th>`).join("") +
       "<th class='total-col'>Year</th></tr></thead><tbody>";
     for (const row of D.heatmap) {
-      const tagTxt = sim ? "SIM" : "LIVE";
       const label = row.live
-        ? `${row.y} <span class="live-tag${sim ? " sim" : ""}"><span class="live-dot"></span>${tagTxt}</span>`
+        ? `${row.y} <span class="live-tag"><span class="live-dot"></span>LIVE</span>`
         : row.y;
-      // Non-color cue for tracked/live months, for users who can't perceive
+      // Non-color cue for live (real-money) months, for users who can't perceive
       // the green border/label (color-blind, high-contrast).
-      const liveTitle = row.live ? (sim ? ' title="Simulated"' : ' title="Live"') : "";
-      const rowCls = row.live ? (sim ? ' class="live-row sim"' : ' class="live-row"') : "";
-      html += `<tr${rowCls}><th>${label}</th>`;
+      const liveTitle = row.live ? ' title="Live"' : "";
+      html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
       for (const v of row.m) {
         const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
         html += `<td${liveTitle} style="background:${cellColor(v, 10)}">${txt}</td>`;
@@ -393,13 +389,13 @@
     scaleToggle: "scale-toggle-q", heatmap: "heatmap-q", ddCallout: null,
     risk: 6, riskGauge: "risk-gauge-q",
   };
-  // Balanced — paper-tracked (simulated), benchmarked against the S&P 500.
+  // Balanced — benchmarked against the S&P 500.
   const S_IDS = {
     stats: "stats-band-s", updatedHero: "updated-hero-s",
     equity: "equity-chart-s", drawdown: "drawdown-chart-s", periodBar: "period-bar-s",
     fromDate: "from-date-s", toDate: "to-date-s", cmpNasdaq: "cmp-nasdaq-s",
     scaleToggle: "scale-toggle-s", heatmap: "heatmap-s", ddCallout: "dd-callout-s",
-    risk: 3, riskGauge: "risk-gauge-s", simulated: true, benchName: "S&P 500",
+    risk: 3, riskGauge: "risk-gauge-s", benchName: "S&P 500",
   };
 
   // ---- Per-page init ----

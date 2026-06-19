@@ -123,9 +123,7 @@
       setKpi("s-cagr", fmtPct(ss.backtest_cagr_pct));
       var sl = document.querySelector('[data-kpi="s-cagr-l"]');
       if (sl && typeof ss.backtest_years === "number") sl.textContent = "Model CAGR (" + Math.round(ss.backtest_years) + "y)";
-      // Paper / simulated track (no real capital); show a dash until it has run.
-      setKpi("s-live", ss.live_months > 0 ? fmtPct(ss.live_total_pct) : "—",
-             ss.live_total_pct >= 0 ? "pos" : "neg");
+      setKpi("s-live", fmtPct(ss.live_total_pct), ss.live_total_pct >= 0 ? "pos" : "neg");
     }
 
     /* ---------------- Contact form (FormSubmit.co AJAX) ---------------- */

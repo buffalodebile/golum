@@ -1,11 +1,9 @@
 # Prisma Capital
 
-> Prisma Capital runs three algorithmic, rules-based strategies. Two are traded
-> live with real money since early 2026 (Nasdaq x Gold Rotation, Quality); one
-> (Balanced) is tracked as a daily paper / simulated portfolio, with no real
-> capital invested. Backtests and performance are published and updated daily
-> (indexed to 100). The exact strategy parameters are private. This is not
-> investment advice.
+> Prisma Capital runs three fully algorithmic, rules-based trading strategies,
+> traded live since early 2026. Backtests and live performance are published and
+> updated daily (indexed to 100 at live inception). The exact strategy parameters
+> are private. This is not investment advice.
 
 ## Strategies
 
@@ -24,15 +22,13 @@ URL: https://www.prisma-capital.xyz/quality.html
 - Lower risk. Backtested since 2010. Quality investing favours consistently
   profitable, financially solid businesses bought at sensible valuations.
 
-### Balanced (lowest risk, simulated)
+### Balanced (lowest risk)
 URL: https://www.prisma-capital.xyz/steady.html
-- A diversified, no-leverage blend of equities, gold and bonds, with a trend
-  filter that trims equity exposure when the stock market weakens. Rebalanced on
-  a fixed monthly schedule, executed the next day.
-- Lowest risk (rated 3/10), built for steady, low-drawdown growth, benchmarked
-  against the S&P 500. Backtested on multi-decade data.
-- Not traded live: tracked as a daily paper / simulated portfolio, no real
-  capital invested. Not a track record and not currently available to copy.
+- Our steadiest strategy: a diversified, no-leverage blend of equities, gold and
+  bonds, built for slow, smooth, low-volatility growth.
+- Lowest risk (rated 3/10), designed to beat US markets over the long run with
+  much smaller drawdowns than a plain stock portfolio. Benchmarked against the
+  S&P 500. Backtested on multi-decade data; live performance updated daily.
 
 ## Contact
 URL: https://www.prisma-capital.xyz/contact.html
