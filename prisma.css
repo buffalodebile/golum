@@ -212,15 +212,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
   background: linear-gradient(155deg, rgba(255,255,255,.2), rgba(255,255,255,.08));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 40px 90px -34px rgba(0,0,0,.95), 0 0 60px -20px rgba(91,200,255,.25); }
 
-/* per-card 3D mark (cards.js): a small spectral octahedron above the name */
+/* per-card 3D mark (cards.js): a small glowing blue wireframe solid above the name */
 .strat-anim { display: block; width: 84px; height: 84px; margin: 2px 0 4px -8px; }
 .strat-anim canvas { display: block; width: 84px !important; height: 84px !important; }
 .strat-card .risk-badge { align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--text-2); margin-bottom: 16px; }
 .strat-card .risk-badge.high { color: #ffd0a8; border-color: rgba(255,122,26,.4); }
 .strat-card .risk-badge.low { color: #a8e6c8; border-color: rgba(74,222,128,.4); }
+/* "Simulé" tag — paper-tracked card, amber so it never reads as the green LIVE state */
+.strat-card .sim-badge { position: absolute; top: 22px; right: 22px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; color: #f4b13b; border: 1px solid rgba(244,177,59,.42); background: rgba(244,177,59,.1); }
 .strat-eyebrow { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 14px; letter-spacing: .03em; margin: 10px 0 0; }
 .strat-eyebrow.alpha { color: var(--accent); }
 .strat-eyebrow.gamma { color: var(--accent); }
+.strat-eyebrow.sigma { color: var(--accent); }
 .strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 2px 0 0; }
 .strat-card .sub { color: var(--muted); font-size: 15px; margin-top: 11px; flex: 1; }
 .strat-kpis { display: flex; gap: 26px; margin: 22px 0 4px; flex-wrap: wrap; }
@@ -239,10 +242,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .spectrum-rail { max-width: 860px; }
 .spectrum-bar { position: relative; height: 3px; border-radius: 999px; margin: 64px 0 16px; background: var(--risk-spectrum); }
 .spectrum-bar .node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--text); }
+.spectrum-bar .node.s { left: 30%; border-color: var(--sp-4); }
 .spectrum-bar .node.q { left: 60%; border-color: var(--accent); }
 .spectrum-bar .node.r { left: 90%; border-color: var(--sp-1); }
 .spectrum-bar .tag { position: absolute; top: -46px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-align: center; white-space: nowrap; }
 .spectrum-bar .tag small { display: block; color: var(--muted); font-size: 10.5px; letter-spacing: .08em; margin-top: 3px; }
+.spectrum-bar .tag.s { left: 30%; color: var(--sp-4); }
 .spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-1); }
 .spectrum-ends { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
@@ -310,8 +315,9 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .hero-lab h1 { font-size: clamp(38px, 12vw, 66px); line-height: 1.0; margin-top: 14px; }
   .hero-lab .lead { font-size: 15.5px; margin-top: 18px; max-width: 100%; }
   .hero-actions { margin-top: 26px; }
-  .spectrum-bar .tag { font-size: 10px; }
-  .spectrum-bar .tag.q { left: 0; transform: none; text-align: left; }
+  .spectrum-bar .tag { font-size: 9.5px; }
+  .spectrum-bar .tag.s { left: 0; transform: none; text-align: left; }
+  .spectrum-bar .tag.q { left: 50%; transform: translateX(-50%); text-align: center; }
   .spectrum-bar .tag.r { left: auto; right: 0; transform: none; text-align: right; }
 }
 

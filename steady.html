@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balanced — Prisma Capital</title>
+  <meta name="description" content="Balanced: a diversified, rules-based multi-asset strategy blending equities, gold and bonds with a trend filter that trims exposure in down markets. Backtest plus a daily paper-tracked curve, updated daily.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Prisma Capital">
+  <meta name="theme-color" content="#0E1117">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://www.prisma-capital.xyz/steady.html">
+  <meta property="og:title" content="Balanced — Prisma Capital">
+  <meta property="og:description" content="A diversified equities · gold · bonds strategy with a trend filter, built for steady, low-drawdown growth. Backtest plus a daily paper-tracked curve.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.prisma-capital.xyz/steady.html">
+  <meta property="og:image" content="https://www.prisma-capital.xyz/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Balanced — Prisma Capital">
+  <meta name="twitter:description" content="A diversified equities · gold · bonds strategy, built for steady, low-drawdown growth. Backtest plus a daily paper-tracked curve.">
+  <meta name="twitter:image" content="https://www.prisma-capital.xyz/og-image.png">
+  <meta name="keywords" content="balanced strategy, diversified multi-asset, equities gold bonds, trend following filter, low drawdown investing, risk parity style, systematic strategy, paper traded portfolio">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="prisma.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.prisma-capital.xyz/steady.html",
+        "url": "https://www.prisma-capital.xyz/steady.html",
+        "name": "Balanced — Prisma Capital",
+        "description": "Balanced: a diversified, rules-based multi-asset strategy blending equities, gold and bonds with a trend filter, tracked as a daily paper portfolio.",
+        "inLanguage": "en",
+        "isPartOf": { "@type": "WebSite", "name": "Prisma Capital", "url": "https://www.prisma-capital.xyz/" },
+        "about": { "@type": "Thing", "name": "Diversified multi-asset trend-filtered investment strategy" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.prisma-capital.xyz/" },
+          { "@type": "ListItem", "position": 2, "name": "Balanced", "item": "https://www.prisma-capital.xyz/steady.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the Balanced strategy?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A diversified, rules-based multi-asset strategy that blends equities, gold and bonds, with a trend filter that reduces equity exposure when markets weaken. It is rebalanced on a fixed monthly schedule and executed the next day, with no discretion, and is built for steady, lower-drawdown growth." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Balanced traded live?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Balanced is tracked as a daily paper (simulated) portfolio computed from real market prices, with no real capital invested. The forward segment after the launch date is a paper track, not a real-money track record, and it is not currently available to copy." }
+          },
+          {
+            "@type": "Question",
+            "name": "How risky is the Balanced strategy?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It is the calmest of Prisma Capital's strategies, rated 3 out of 10. It uses no leverage and spreads risk across equities, gold and bonds; in backtesting its worst drawdown was far shallower than a stock index. Diversified strategies can still lose value, so it is not risk-free." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Balanced benchmarked against?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Against an S&P 500 buy-and-hold. Left of the dashed line the curve is a backtest simulation on historical data; right of it is a daily paper track. Both are shown on the page and updated daily. Backtested results are a simulation, not a track record." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+  <script src="steady.js"></script>
+</head>
+<body class="strategy steady-page">
+  <div class="grain" aria-hidden="true"></div>
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+        <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <defs><linearGradient id="pg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+          <path d="M20 7 L33 31 H7 Z" fill="url(#pg)" stroke="url(#pg)" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+        <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <div class="nav-dd">
+          <a href="index.html#strategies" class="nav-dd-trigger active">Strategies
+            <svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="nav-dd-menu">
+            <a href="rotation.html">Nasdaq &times; Gold</a>
+            <a href="quality.html">Quality &times; Growth</a>
+            <a href="steady.html" class="active">Balanced</a>
+          </div>
+        </div>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a class="btn btn-ghost nav-cta" href="contact.html">Get in touch</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      All strategies
+    </a>
+
+    <header class="hero">
+      <div class="hero-glow"></div>
+      <div class="tags">
+        <span class="tag">ALGORITHMIC</span>
+        <span class="tag">EQUITIES &middot; GOLD &middot; BONDS</span>
+        <span class="sim-badge-lg"><span class="sim-dot"></span>SIMULATED</span>
+      </div>
+      <h1>Balanced</h1>
+      <p class="tagline">A diversified, rules-based blend of equities, gold and bonds, with a trend filter that trims exposure when markets turn down. Built for steady, low-drawdown growth, and tracked daily as a paper portfolio.</p>
+      <div class="stats" id="stats-band-s"></div>
+      <div class="risk-gauge" id="risk-gauge-s"></div>
+      <div class="updated-hero" id="updated-hero-s"></div>
+      <p class="sim-note"><strong>Simulé / papier.</strong> Tracked daily from real market prices, with no real capital invested. Not a real-money track record, and not currently available to copy.</p>
+    </header>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Growth of $100</h2>
+        <div class="chart-controls">
+          <label class="cmp"><input type="checkbox" id="cmp-nasdaq-s"> Compare S&amp;P 500</label>
+          <div class="toggle" id="scale-toggle-s">
+            <button data-scale="log" class="active">Log</button>
+            <button data-scale="linear">Linear</button>
+          </div>
+        </div>
+      </div>
+      <div class="period-bar" id="period-bar-s"></div>
+      <div id="equity-chart-s" class="chart tall"></div>
+      <div id="drawdown-chart-s" class="chart dd"></div>
+      <div class="range-inputs">
+        <label>From <input type="date" id="from-date-s"></label>
+        <label>To <input type="date" id="to-date-s"></label>
+      </div>
+      <p class="hint">What $100 would have become. The dashed line marks the start of the daily paper track; everything to its left is a backtest.</p>
+    </section>
+
+    <section class="card">
+      <h2>Monthly returns (%)</h2>
+      <div class="heatmap-wrap">
+        <table class="heatmap" id="heatmap-s"></table>
+      </div>
+      <p class="hint">Plain rows are the backtested model; <span class="live-tag sim">SIM</span> rows are the daily paper track. The paper track won't match the model exactly: real prices, execution timing, and a gradual start.</p>
+    </section>
+
+    <section class="card faq">
+      <h2>How it works</h2>
+      <p>Balanced spreads its money across three building blocks: <strong>equities</strong>, <strong>gold</strong> and <strong>bonds</strong>. A trend filter watches the stock market and quietly reduces equity exposure when it weakens, so the portfolio leans on its calmer holdings in rough patches. The rules are simple and fixed, rebalanced on a set monthly schedule and executed the next day, with no discretion.</p>
+      <details name="how-steady">
+        <summary>Diversification</summary>
+        <div class="answer">Equities power the growth, while gold and bonds tend to hold up when stocks fall. Holding all three together smooths the ride and shrinks the deep drawdowns.</div>
+      </details>
+      <details name="how-steady">
+        <summary>Trend filter</summary>
+        <div class="answer">When the broad stock market loses its medium-term uptrend, equity exposure is automatically trimmed and shifted toward the defensive holdings, then restored when the trend recovers.</div>
+      </details>
+      <details name="how-steady">
+        <summary>Calm by design</summary>
+        <div class="answer">No leverage, a fixed monthly cadence and only a handful of changes a year. The goal is steady compounding with shallow losses, not the highest possible return.</div>
+      </details>
+      <p>The exact mix and signal settings are the result of research and walk-forward validation, and are kept private.</p>
+    </section>
+
+    <section class="card disclaimer">
+      <h2>Important disclaimers</h2>
+      <p><strong>Simulated / paper, not live.</strong> Balanced is not traded with real capital. The whole curve is a model: left of the dashed line it is a backtest on historical data with cost assumptions; right of the dashed line it is a daily paper track computed from real market prices. Neither is a real-money track record, and the strategy is not currently available to copy.</p>
+      <p><strong>Lower risk, not no risk.</strong> Balanced uses no leverage and diversifies across equities, gold and bonds, so its worst modelled drawdown was modest, around <span id="dd-callout-s">-12%</span>. Even so, diversified portfolios can fall, and gold and bonds can drop at the same time as stocks.</p>
+      <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. Backtested and paper results are simulations, not a track record. Do your own research and never invest money you cannot afford to lose.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+          <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M20 7 L33 31 H7 Z" fill="url(#pg)" stroke="url(#pg)" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+          <span class="nav-wordmark">Prisma <b class="spectrum-text">Capital</b></span>
+        </a>
+        <p>Fully systematic, rules-based strategies. Backtests and performance, updated daily.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Strategies</h5>
+        <a href="rotation.html">Nasdaq &times; Gold Rotation</a>
+        <a href="quality.html">Quality × Growth</a>
+        <a href="steady.html">Balanced</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.etoro.com/people/pauladrienb" target="_blank" rel="noopener">eToro profile</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Not investment advice. Past performance does not guarantee future results. These strategies involve risk, including the loss of capital. Backtested and paper results are simulations on historical data, not a track record.</p>
+      <p class="copy">&copy; Prisma Capital</p>
+    </div>
+  </footer>
+
+  <script src="prisma.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

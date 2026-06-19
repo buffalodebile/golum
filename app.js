@@ -36,12 +36,16 @@
     }
 
     // ---- Stats band ----
+    // `simulated` strategies are paper-tracked (no real capital); their forward
+    // segment is labelled "tracked / sim." rather than "live" everywhere.
+    const sim = !!ids.simulated;
+    const benchName = ids.benchName || "Nasdaq-100";
     const s = D.stats;
     const fmtPct = (v) => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
     if (statsEl) statsEl.innerHTML = [
-      ["Live return", fmtPct(s.live_total_pct), s.live_total_pct >= 0 ? "pos" : "neg"],
-      ["Months live", String(s.live_months), "accent"],
-      ["Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
+      [sim ? "Tracked (sim.)" : "Live return", fmtPct(s.live_total_pct), s.live_total_pct >= 0 ? "pos" : "neg"],
+      [sim ? "Months tracked" : "Months live", String(s.live_months), "accent"],
+      [sim ? "Sim. max drawdown" : "Live max drawdown", s.live_max_dd_pct.toFixed(1) + "%", "neg"],
       ["Model CAGR (" + s.backtest_years.toFixed(0) + "y)", fmtPct(s.backtest_cagr_pct), ""],
     ].map(([label, value, cls]) =>
       `<div class="stat"><div class="value ${cls}">${value}</div><div class="label">${label}</div></div>`
@@ -110,7 +114,7 @@
       ["3Y", () => minusYears(today, 3)],
       ["1Y", () => minusYears(today, 1)],
       ["YTD", () => today.slice(0, 4) + "-01-01"],
-      ["Live", () => inception],
+      [sim ? "Sim." : "Live", () => inception],
     ].filter(([label]) => {
       const m = label.match(/^(\d+)Y$/);
       return !m || +m[1] <= spanYears;
@@ -150,9 +154,9 @@
       if (state.nasdaq) {
         const sNdx = rebase(ndx, state.from, state.to);
         traces.push({
-          x: sNdx.x, y: sNdx.y, name: "Nasdaq-100 (buy & hold)",
+          x: sNdx.x, y: sNdx.y, name: benchName + " (buy & hold)",
           mode: "lines", line: { color: NASDAQ, width: 1.8 },
-          hovertemplate: "$%{y:,.0f}<extra>Nasdaq-100</extra>",
+          hovertemplate: "$%{y:,.0f}<extra>" + benchName + "</extra>",
         });
       }
 
@@ -164,7 +168,8 @@
         });
         annotations.push({
           x: inception, y: 1, yref: "paper", yanchor: "bottom", xanchor: "right",
-          text: "Live start", showarrow: false, font: { color: "#C7CCD6", size: 11 },
+          text: sim ? "Tracked since" : "Live start", showarrow: false,
+          font: { color: "#C7CCD6", size: 11 },
         });
       }
 
@@ -292,13 +297,15 @@
       MONTHS.map((m) => `<th>${m}</th>`).join("") +
       "<th class='total-col'>Year</th></tr></thead><tbody>";
     for (const row of D.heatmap) {
+      const tagTxt = sim ? "SIM" : "LIVE";
       const label = row.live
-        ? `${row.y} <span class="live-tag"><span class="live-dot"></span>LIVE</span>`
+        ? `${row.y} <span class="live-tag${sim ? " sim" : ""}"><span class="live-dot"></span>${tagTxt}</span>`
         : row.y;
-      // Non-color cue for live (real-money) months, for users who can't perceive
+      // Non-color cue for tracked/live months, for users who can't perceive
       // the green border/label (color-blind, high-contrast).
-      const liveTitle = row.live ? ' title="Live"' : "";
-      html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
+      const liveTitle = row.live ? (sim ? ' title="Simulated"' : ' title="Live"') : "";
+      const rowCls = row.live ? (sim ? ' class="live-row sim"' : ' class="live-row"') : "";
+      html += `<tr${rowCls}><th>${label}</th>`;
       for (const v of row.m) {
         const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
         html += `<td${liveTitle} style="background:${cellColor(v, 10)}">${txt}</td>`;
@@ -386,13 +393,22 @@
     scaleToggle: "scale-toggle-q", heatmap: "heatmap-q", ddCallout: null,
     risk: 6, riskGauge: "risk-gauge-q",
   };
+  // Balanced — paper-tracked (simulated), benchmarked against the S&P 500.
+  const S_IDS = {
+    stats: "stats-band-s", updatedHero: "updated-hero-s",
+    equity: "equity-chart-s", drawdown: "drawdown-chart-s", periodBar: "period-bar-s",
+    fromDate: "from-date-s", toDate: "to-date-s", cmpNasdaq: "cmp-nasdaq-s",
+    scaleToggle: "scale-toggle-s", heatmap: "heatmap-s", ddCallout: "dd-callout-s",
+    risk: 3, riskGauge: "risk-gauge-s", simulated: true, benchName: "S&P 500",
+  };
 
   // ---- Per-page init ----
   // Each strategy now lives on its own page (rotation.html / quality.html).
   // Render whichever panel is present. Panels are always visible, so Plotly lays
   // out at full width immediately — no tab switching or lazy-render needed.
   const gen = (window.SITE_DATA && window.SITE_DATA.generated_at) ||
-              (window.QUALITY_DATA && window.QUALITY_DATA.generated_at);
+              (window.QUALITY_DATA && window.QUALITY_DATA.generated_at) ||
+              (window.STEADY_DATA && window.STEADY_DATA.generated_at);
   const upEl = document.getElementById("updated");
   if (upEl && gen) upEl.textContent = "Data updated " + gen;
 
@@ -402,5 +418,8 @@
   if (document.getElementById("equity-chart-q") && window.QUALITY_DATA) {
     renderStrategy(window.QUALITY_DATA, Q_IDS);
     renderHoldings(window.QUALITY_DATA, { table: "holdings-q", countdown: "countdown-q" });
+  }
+  if (document.getElementById("equity-chart-s") && window.STEADY_DATA) {
+    renderStrategy(window.STEADY_DATA, S_IDS);
   }
 })();

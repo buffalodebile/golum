@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prisma Capital — Algorithmic strategies, traded live</title>
-  <meta name="description" content="Prisma Capital runs two fully algorithmic strategies, traded live: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy. Backtests and live performance, updated daily.">
+  <meta name="description" content="Prisma Capital runs three algorithmic strategies: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy traded live, plus a balanced multi-asset strategy. Backtests and performance, updated daily.">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Prisma Capital">
   <meta name="theme-color" content="#06080E">
@@ -12,13 +12,13 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="canonical" href="https://www.prisma-capital.xyz/">
   <meta property="og:title" content="Prisma Capital — Algorithmic strategies, traded live">
-  <meta property="og:description" content="Two fully algorithmic strategies, traded live. Backtests and live performance, updated daily.">
+  <meta property="og:description" content="Three algorithmic strategies. Backtests and performance, updated daily.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.prisma-capital.xyz/">
   <meta property="og:image" content="https://www.prisma-capital.xyz/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Prisma Capital — Algorithmic strategies, traded live">
-  <meta name="twitter:description" content="Two fully algorithmic strategies, traded live. Performance updated daily.">
+  <meta name="twitter:description" content="Three algorithmic strategies. Performance updated daily.">
   <meta name="twitter:image" content="https://www.prisma-capital.xyz/og-image.png">
   <script type="application/ld+json">
   {
@@ -26,7 +26,7 @@
     "@type": "Organization",
     "name": "Prisma Capital",
     "url": "https://www.prisma-capital.xyz/",
-    "description": "Prisma Capital runs two fully algorithmic strategies traded live: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy built on company fundamentals.",
+    "description": "Prisma Capital runs algorithmic strategies: a leveraged Nasdaq-100 × Gold rotation and a quality-value stock strategy traded live, plus a balanced multi-asset strategy tracked daily.",
     "sameAs": ["https://www.etoro.com/people/pauladrienb"]
   }
   </script>
@@ -40,7 +40,8 @@
         "name": "Prisma Capital strategies",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Nasdaq × Gold Rotation", "url": "https://www.prisma-capital.xyz/rotation.html" },
-          { "@type": "ListItem", "position": 2, "name": "Quality", "url": "https://www.prisma-capital.xyz/quality.html" }
+          { "@type": "ListItem", "position": 2, "name": "Quality", "url": "https://www.prisma-capital.xyz/quality.html" },
+          { "@type": "ListItem", "position": 3, "name": "Balanced", "url": "https://www.prisma-capital.xyz/steady.html" }
         ]
       }
     ]
@@ -61,6 +62,7 @@
   </script>
   <script src="data.js" defer></script>
   <script src="quality.js" defer></script>
+  <script src="steady.js" defer></script>
 </head>
 <body class="landing">
   <div class="grain" aria-hidden="true"></div>
@@ -84,6 +86,7 @@
           <div class="nav-dd-menu">
             <a href="rotation.html">Nasdaq &times; Gold</a>
             <a href="quality.html">Quality &times; Growth</a>
+            <a href="steady.html">Balanced</a>
           </div>
         </div>
         <a href="contact.html">Contact</a>
@@ -187,6 +190,21 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </span>
         </a>
+        <a class="strat-card reveal" href="steady.html">
+          <span class="risk-badge low">Risk 3 / 10</span>
+          <span class="sim-badge" title="Suivi simulé, sans capital réel">Simulé</span>
+          <span class="strat-anim" data-3d data-shape="torus" aria-hidden="true"></span>
+          <span class="strat-eyebrow sigma">Sigma</span>
+          <h3>Balanced</h3>
+          <p class="sub">A diversified blend of equities, gold and bonds, with a trend filter that trims exposure when markets turn down — built for steady, low-drawdown growth.</p>
+          <div class="strat-kpis">
+            <div><div class="v" data-kpi="s-cagr">—</div><div class="l" data-kpi="s-cagr-l">Model CAGR</div></div>
+            <div><div class="v" data-kpi="s-live">—</div><div class="l">Tracked (sim.)</div></div>
+          </div>
+          <span class="text-link strat-link">View strategy
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </a>
       </div>
     </div>
   </section>
@@ -197,10 +215,11 @@
       <div class="section-head reveal">
         <span class="kicker">Risk</span>
         <h2>Pick your point on the spectrum.</h2>
-        <p>Like white light through a prism, the two strategies split across the risk range, so you can sit where you're comfortable.</p>
+        <p>Like white light through a prism, the strategies split across the risk range, so you can sit where you're comfortable.</p>
       </div>
       <div class="spectrum-rail reveal">
         <div class="spectrum-bar">
+          <span class="node s"></span><span class="tag s">Balanced<small>3 / 10</small></span>
           <span class="node q"></span><span class="tag q">Quality × Growth<small>6 / 10</small></span>
           <span class="node r"></span><span class="tag r">Nasdaq × Gold<small>9 / 10</small></span>
         </div>
@@ -239,6 +258,7 @@
         <h5>Strategies</h5>
         <a href="rotation.html">Nasdaq × Gold Rotation</a>
         <a href="quality.html">Quality × Growth</a>
+        <a href="steady.html">Balanced</a>
       </div>
       <div class="footer-col">
         <h5>Company</h5>

@@ -1,11 +1,13 @@
 /* Prisma Capital — strategy-card 3D mark.
-   A small faceted 3D gem with spectrum-coloured edges, above each strategy name:
-   an octahedron by default, or a cube when the mount sets data-shape="cube".
+   A small glowing blue/cyan WIREFRAME solid above each strategy name, with the
+   full mesh grid visible ("traits visibles"): an octahedron by default, a cube
+   when data-shape="cube", and a ring/torus when data-shape="torus".
    Slow idle spin around the vertical axis; on card hover it speeds up and tilts
    into a diagonal corner-to-corner tumble. One tiny renderer per card. Degrades
    silently if WebGL is unavailable. */
 
-const SPEC = [[255, 45, 45], [255, 122, 26], [255, 210, 0], [76, 217, 100], [24, 182, 246], [76, 110, 245], [155, 92, 255]];
+const WIRE = 0x5bc8ff;   // accent cyan — matches --accent
+const GLOW = 0x8fe0ff;   // lighter cyan for the additive halo
 const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 // Like the hero, skip these WebGL marks on small / touch screens and load
 // three.js lazily so phones never download it.
@@ -17,6 +19,17 @@ if (mounts.length && !isMobile) initCards();
 async function initCards() {
   const THREE = await import("three");
   mounts.forEach((mount) => initCard(THREE, mount));
+}
+
+// Segmented geometries so the wireframe shows a full lat/long-style grid, not
+// just the silhouette edges.
+function makeGeo(THREE, shape) {
+  switch (shape) {
+    case "torus": return new THREE.TorusGeometry(0.82, 0.33, 14, 36);
+    case "cube":  return new THREE.BoxGeometry(1.35, 1.35, 1.35, 3, 3, 3);
+    case "icosa": return new THREE.IcosahedronGeometry(1.15, 1);
+    default:      return new THREE.OctahedronGeometry(1.2, 1);
+  }
 }
 
 function initCard(THREE, mount) {
@@ -32,30 +45,25 @@ function initCard(THREE, mount) {
   const cam = new THREE.PerspectiveCamera(42, 1, 0.1, 10);
   cam.position.z = 3.5;
 
-  const geo = mount.dataset.shape === "cube"
-    ? new THREE.BoxGeometry(1.5, 1.5, 1.5)
-    : new THREE.OctahedronGeometry(1.2, 0);
-  const face = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0e1320, transparent: true, opacity: 0.5 }));
-
-  // spectrum-coloured wireframe edges (per-vertex gradient by height)
-  const eg = new THREE.EdgesGeometry(geo);
-  const pos = eg.attributes.position;
-  const colors = new Float32Array(pos.count * 3);
-  let minY = Infinity, maxY = -Infinity;
-  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i); if (y < minY) minY = y; if (y > maxY) maxY = y; }
-  for (let i = 0; i < pos.count; i++) {
-    const t = (pos.getY(i) - minY) / (maxY - minY || 1);
-    const x = t * (SPEC.length - 1), j = Math.floor(x), f = x - j;
-    const a = SPEC[j], b = SPEC[Math.min(j + 1, SPEC.length - 1)];
-    colors[i * 3] = (a[0] + (b[0] - a[0]) * f) / 255;
-    colors[i * 3 + 1] = (a[1] + (b[1] - a[1]) * f) / 255;
-    colors[i * 3 + 2] = (a[2] + (b[2] - a[2]) * f) / 255;
-  }
-  eg.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  const edges = new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95 }));
+  const geo = makeGeo(THREE, mount.dataset.shape);
+  // One wireframe geometry, drawn twice: a crisp core + a softly blown-out halo.
+  // Additive blending makes the line crossings bloom, for the "mèche" glow.
+  const wireGeo = new THREE.WireframeGeometry(geo);
+  const core = new THREE.LineSegments(
+    wireGeo,
+    new THREE.LineBasicMaterial({ color: WIRE, transparent: true, opacity: 0.92 })
+  );
+  const halo = new THREE.LineSegments(
+    wireGeo,
+    new THREE.LineBasicMaterial({
+      color: GLOW, transparent: true, opacity: 0.3,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })
+  );
+  halo.scale.setScalar(1.06);
 
   const grp = new THREE.Group();
-  grp.add(face, edges);
+  grp.add(core, halo);
   scene.add(grp);
 
   const card = mount.closest(".strat-card");
