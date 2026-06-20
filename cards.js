@@ -9,12 +9,13 @@
 const WIRE = 0x5bc8ff;   // accent cyan — matches --accent
 const GLOW = 0x8fe0ff;   // lighter cyan for the additive halo
 const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-// Like the hero, skip these WebGL marks on small / touch screens and load
-// three.js lazily so phones never download it.
-const isMobile = window.matchMedia && window.matchMedia("(max-width: 680px), (pointer: coarse)").matches;
+// These little wireframe marks render on mobile too (Paul wants them visible on
+// phones). three.js is still imported lazily, only when a mount is present, and
+// the spin pauses when the tab is hidden — see below. prefers-reduced-motion
+// still drops to a single static frame.
 const mounts = document.querySelectorAll(".strat-anim[data-3d]");
 
-if (mounts.length && !isMobile) initCards();
+if (mounts.length) initCards();
 
 async function initCards() {
   const THREE = await import("three");
