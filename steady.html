@@ -76,12 +76,20 @@
   </script>
   <script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
   <script src="steady.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 <body class="strategy steady-page">
   <div class="grain" aria-hidden="true"></div>
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+      <a class="nav-brand" href="/" aria-label="Prisma Capital — home">
         <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
           <defs><linearGradient id="pg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
           <path d="M20 7 L33 31 H7 Z" fill="url(#pg)" stroke="url(#pg)" stroke-width="1.6" stroke-linejoin="round"/>
@@ -90,7 +98,7 @@
       </a>
       <nav class="nav-links" aria-label="Primary">
         <div class="nav-dd">
-          <a href="index.html#strategies" class="nav-dd-trigger active">Strategies
+          <a href="/#strategies" class="nav-dd-trigger active">Strategies
             <svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </a>
           <div class="nav-dd-menu">
@@ -108,7 +116,7 @@
   </header>
 
   <main>
-    <a class="back-link" href="index.html">
+    <a class="back-link" href="/">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       All strategies
     </a>
@@ -121,6 +129,7 @@
         <span class="live-badge"><span class="live-dot"></span>LIVE</span>
       </div>
       <h1>Balance Equilibrium</h1>
+      <span class="strat-anim hero-mark" data-3d data-shape="torus" aria-hidden="true"></span>
       <p class="tagline">Our steadiest strategy. Slow, smooth, low-volatility growth from a balanced blend of equities, gold and bonds, built to beat US markets over the long run with much smaller drawdowns than a plain stock portfolio.</p>
       <div class="stats" id="stats-band-s"></div>
       <div class="risk-gauge" id="risk-gauge-s"></div>
@@ -185,7 +194,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <a class="nav-brand" href="index.html" aria-label="Prisma Capital — home">
+        <a class="nav-brand" href="/" aria-label="Prisma Capital — home">
           <svg class="nav-logo" viewBox="0 0 40 40" fill="none" aria-hidden="true">
             <path d="M20 7 L33 31 H7 Z" fill="url(#pg)" stroke="url(#pg)" stroke-width="1.6" stroke-linejoin="round"/>
           </svg>
@@ -213,5 +222,6 @@
 
   <script src="prisma.js"></script>
   <script src="app.js"></script>
+  <script type="module" src="cards.js"></script>
 </body>
 </html>

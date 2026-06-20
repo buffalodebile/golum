@@ -87,6 +87,10 @@ main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; }
 
 .hero h1 .x { -webkit-text-fill-color: var(--accent); color: var(--accent); }
 
+/* Slowly spinning 3D wireframe mark under the strategy title — same mark as the
+   home strategy cards (cards.js), recentred for the centred hero. */
+.hero .strat-anim.hero-mark { margin: 2px auto 20px; }
+
 .tagline {
   position: relative;
   color: var(--muted);
