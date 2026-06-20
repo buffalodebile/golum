@@ -249,6 +249,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .spectrum-bar .tag.s { left: 30%; color: var(--sp-4); }
 .spectrum-bar .tag.q { left: 60%; color: var(--accent); } .spectrum-bar .tag.r { left: 90%; color: var(--sp-1); }
 .spectrum-ends { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+/* Vertical rail used on phones instead of the horizontal bar (see 680px media). */
+.spectrum-vert { display: none; }
 
 /* Contact CTA band */
 .cta-band .cta-card { position: relative; border: 1px solid rgba(255,255,255,.22); border-radius: 18px; padding: 66px 32px; text-align: center; overflow: hidden;
@@ -314,10 +316,28 @@ body.strategy .hero h1 { background: none; -webkit-text-fill-color: var(--text);
   .hero-lab h1 { font-size: clamp(38px, 12vw, 66px); line-height: 1.0; margin-top: 14px; }
   .hero-lab .lead { font-size: 15.5px; margin-top: 18px; max-width: 100%; }
   .hero-actions { margin-top: 26px; }
-  .spectrum-bar .tag { font-size: 9.5px; }
-  .spectrum-bar .tag.s { left: 0; transform: none; text-align: left; }
-  .spectrum-bar .tag.q { left: 50%; transform: translateX(-50%); text-align: center; }
-  .spectrum-bar .tag.r { left: auto; right: 0; transform: none; text-align: right; }
+  /* The horizontal rail can't fit three strategy names side by side on a phone
+     without overlapping, so swap to a vertical rail: score on the left, a dot on
+     the line, strategy name on the right, lowest risk at the top. */
+  .spectrum-bar, .spectrum-ends { display: none; }
+  .spectrum-vert {
+    display: grid; position: relative; list-style: none;
+    grid-template-columns: 52px 26px 1fr;
+    align-items: center; row-gap: 34px;
+    margin: 30px auto 8px; padding: 8px 0; max-width: 330px;
+  }
+  .spectrum-vert::before {
+    content: ""; position: absolute; left: 65px; top: 15px; bottom: 15px;
+    width: 3px; transform: translateX(-50%); border-radius: 999px;
+    background: linear-gradient(180deg, var(--sp-4), var(--accent) 50%, var(--sp-1));
+  }
+  .sv-row { display: contents; }
+  .sv-score { grid-column: 1; text-align: right; font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--muted); }
+  .sv-node { grid-column: 2; justify-self: center; z-index: 1; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--text); }
+  .sv-name { grid-column: 3; font-family: var(--font-mono); font-size: 13px; letter-spacing: .04em; white-space: nowrap; }
+  .sv-row.s .sv-node { border-color: var(--sp-4); } .sv-row.s .sv-name { color: var(--sp-4); }
+  .sv-row.q .sv-node { border-color: var(--accent); } .sv-row.q .sv-name { color: var(--accent); }
+  .sv-row.r .sv-node { border-color: var(--sp-1); } .sv-row.r .sv-name { color: var(--sp-1); }
 }
 
 /* ============================ Live badge ============================ */
