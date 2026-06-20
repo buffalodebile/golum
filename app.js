@@ -194,9 +194,9 @@
       if (state.nasdaq) {
         const ddN = ddWindow(ndx, state.from, state.to);
         ddTraces.push({
-          x: ddN.x, y: ddN.y, name: "Nasdaq-100",
+          x: ddN.x, y: ddN.y, name: benchName,
           mode: "lines", line: { color: NASDAQ, width: 1.4 },
-          hovertemplate: "%{y:.1f}%<extra>Nasdaq DD</extra>",
+          hovertemplate: "%{y:.1f}%<extra>" + benchName + " DD</extra>",
         });
       }
       const ddLayout = Object.assign({}, baseLayout, {
