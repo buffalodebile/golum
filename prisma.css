@@ -223,6 +223,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .strat-eyebrow.gamma { color: var(--accent); }
 .strat-eyebrow.sigma { color: var(--accent); }
 .strat-card h3 { font-family: var(--font-display); font-size: clamp(25px, 3vw, 33px); font-weight: 600; margin: 2px 0 0; }
+.strat-card h3 .x { color: var(--accent); -webkit-text-fill-color: var(--accent); }
 .strat-card .sub { color: var(--muted); font-size: 15px; margin-top: 11px; flex: 1; }
 .strat-kpis { display: flex; gap: 26px; margin: 22px 0 4px; flex-wrap: wrap; }
 .strat-kpis .v { font-family: var(--font-mono); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
