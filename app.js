@@ -303,6 +303,14 @@
     }
 
     // ---- Monthly returns heatmap ----
+    // Mark the exact cell where live trading began (the inception month), to mirror
+    // the dashed "Live start" line on the equity / drawdown charts above. The marker
+    // sits on the live row for that year if one exists yet; on a freshly launched
+    // strategy no live month is complete, so it falls back to the model row.
+    const liveYear = inception ? +inception.slice(0, 4) : null;
+    const liveMonthIdx = inception ? +inception.slice(5, 7) - 1 : null;
+    const hasLiveRowForYear = D.heatmap.some((r) => r.live && r.y === liveYear);
+
     const table = document.getElementById(ids.heatmap);
     let html = "<thead><tr><th></th>" +
       MONTHS.map((m) => `<th>${m}</th>`).join("") +
@@ -314,11 +322,16 @@
       // Non-color cue for live (real-money) months, for users who can't perceive
       // the green border/label (color-blind, high-contrast).
       const liveTitle = row.live ? ' title="Live"' : "";
+      const markerRow = liveYear != null && row.y === liveYear &&
+        (hasLiveRowForYear ? !!row.live : !row.live);
       html += `<tr${row.live ? ' class="live-row"' : ""}><th>${label}</th>`;
-      for (const v of row.m) {
+      row.m.forEach((v, mi) => {
         const txt = v == null ? "" : (v > 0 ? "+" : "") + v.toFixed(1);
-        html += `<td${liveTitle} style="background:${cellColor(v, 10)}">${txt}</td>`;
-      }
+        const isStart = markerRow && mi === liveMonthIdx;
+        const cls = isStart ? ' class="live-start"' : "";
+        const tip = isStart ? ` title="Live start (${MONTHS[mi]} ${row.y})"` : liveTitle;
+        html += `<td${cls}${tip} style="background:${cellColor(v, 10)}">${txt}</td>`;
+      });
       const t = row.total;
       html += `<td class="total-col"${liveTitle} style="background:${cellColor(t, 30)}">` +
         `${(t > 0 ? "+" : "") + t.toFixed(1)}</td></tr>`;
