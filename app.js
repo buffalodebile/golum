@@ -143,6 +143,7 @@
     const config = { displayModeBar: false, responsive: true };
 
     function render() {
+      if (typeof Plotly === "undefined") return;  // chart lib blocked/slow; rest of page still renders
       const sStrat = rebase(strat, state.from, state.to);
       const ddS = ddWindow(strat, state.from, state.to);
       const traces = [{
@@ -225,6 +226,7 @@
     }
     function wireZoom() {
       const gd = document.getElementById(ids.equity);
+      if (!gd || typeof gd.on !== "function") return;  // Plotly absent: no chart events to wire
       let guard = false;
       gd.on("plotly_relayout", (ev) => {
         if (guard) return;
@@ -289,6 +291,17 @@
     render();
     wireZoom();
 
+    // If the chart library never loaded (blocked/offline), replace the empty
+    // chart boxes with a short note. Stats and the heatmap below still render.
+    if (typeof Plotly === "undefined") {
+      [ids.equity, ids.drawdown].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML =
+          "<p class='chart-fallback'>The chart could not load. " +
+          "If you use an ad or script blocker, allow this page and refresh.</p>";
+      });
+    }
+
     // ---- Monthly returns heatmap ----
     const table = document.getElementById(ids.heatmap);
     let html = "<thead><tr><th></th>" +
@@ -316,6 +329,7 @@
 
     return {
       resize() {
+        if (typeof Plotly === "undefined") return;
         Plotly.Plots.resize(document.getElementById(ids.equity));
         Plotly.Plots.resize(document.getElementById(ids.drawdown));
       },
