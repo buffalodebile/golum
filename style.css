@@ -467,7 +467,8 @@ footer a { color: var(--accent); text-decoration: none; }
 
   .holdings { font-size: 12.5px; }
   .holdings th, .holdings td { padding: 8px 9px; }
-  .holdings .sec { display: none; }
+  .holdings .sec,
+  .holdings thead th:nth-child(3) { display: none; } /* hide Sector header too, else Weight/Growth shift left */
   .card-head .countdown { width: 100%; }
 }
 
