@@ -25,7 +25,7 @@ URL: https://www.prisma-capital.xyz/quality.html
 ### Balance Equilibrium (lowest risk)
 URL: https://www.prisma-capital.xyz/steady.html
 - Our steadiest strategy: a diversified, no-leverage blend of equities, gold and
-  bonds, built for slow, smooth, low-volatility growth.
+  bonds, built for smooth, low-volatility growth.
 - Lowest risk (rated 3/10), designed to beat US markets over the long run with
   much smaller drawdowns than a plain stock portfolio. Benchmarked against the
   S&P 500. Backtested on multi-decade data; live performance updated daily.

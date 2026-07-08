@@ -261,7 +261,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height
 .cta-card p { color: var(--text-2); font-size: 17px; max-width: 520px; margin: 16px auto 28px; }
 
 /* ============================ Footer ============================ */
-.site-footer { border-top: 1px solid var(--line); }
+.site-footer { border-top: 1px solid var(--line); text-align: left; }
 .footer-inner { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; padding: 56px 0 34px; }
 .footer-brand .nav-brand { margin-bottom: 14px; }
 .footer-brand p { color: var(--muted); font-size: 14px; max-width: 320px; }

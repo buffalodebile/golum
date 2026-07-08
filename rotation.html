@@ -52,7 +52,7 @@
           {
             "@type": "Question",
             "name": "What is the Nasdaq × Gold rotation strategy?",
-            "acceptedAnswer": { "@type": "Answer", "text": "A fully systematic strategy that rotates between a leveraged Nasdaq-100 ETP and leveraged Gold, following the medium-term trend and scaling exposure to market volatility, protected by a trailing stop. Signals are computed after the US close and executed automatically the next day, with no discretion." }
+            "acceptedAnswer": { "@type": "Answer", "text": "A fully systematic strategy that rotates between leveraged Nasdaq-100 exposure and leveraged Gold, following the medium-term trend and scaling exposure to market volatility, protected by a trailing stop. Signals are computed after the US close and executed automatically the next day, with no discretion." }
           },
           {
             "@type": "Question",
@@ -62,7 +62,7 @@
           {
             "@type": "Question",
             "name": "How risky is the Nasdaq × Gold rotation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "It is a high-risk strategy, rated 9 out of 10 on Prisma Capital's risk scale. It uses leveraged ETPs that can lose value rapidly, including in sideways markets through volatility decay; the model's worst historical drawdown exceeds -60%." }
+            "acceptedAnswer": { "@type": "Answer", "text": "It is a high-risk strategy, rated 9 out of 10 on Prisma Capital's risk scale. It uses leveraged instruments that can lose value rapidly, including in sideways markets through volatility decay; the model's worst historical drawdown exceeds -60%." }
           },
           {
             "@type": "Question",
@@ -133,7 +133,7 @@
       </div>
       <span class="strat-anim hero-mark" data-3d aria-hidden="true"></span>
       <h1>Nasdaq <span class="x">&times;</span> Gold Rotation</h1>
-      <p class="tagline">An algorithmic strategy that has beaten the Nasdaq across four decades of backtesting, rotating between leveraged Nasdaq&#8209;100 and Gold and scaling its exposure to market volatility.</p>
+      <p class="tagline">An algorithmic strategy that has outperformed the Nasdaq across four decades of backtesting, rotating between leveraged Nasdaq&#8209;100 and Gold and scaling its exposure to market volatility.</p>
       <div class="stats" id="stats-band"></div>
       <div class="risk-gauge" id="risk-gauge"></div>
       <div class="updated-hero" id="updated-hero"></div>
@@ -174,26 +174,26 @@
 
     <section class="card faq">
       <h2>How it works</h2>
-      <p>The strategy rotates between a <strong>leveraged Nasdaq-100 ETP</strong> and <strong>leveraged Gold</strong>, following simple, fixed rules. Signals are computed daily after the US close and executed automatically the next day, with no discretion.</p>
+      <p>The strategy rotates between <strong>leveraged Nasdaq-100 exposure</strong> and <strong>leveraged Gold</strong>, following a fixed, rules-based framework. Signals are computed daily after the US close and executed automatically the next day, with no discretion.</p>
       <details name="how-rotation">
         <summary>Trend following</summary>
-        <div class="answer">When the Nasdaq is in a medium-term uptrend, the portfolio holds leveraged Nasdaq, balanced with gold. When the trend breaks, it rotates fully into gold.</div>
+        <div class="answer">While the Nasdaq holds a medium-term uptrend, the portfolio maintains leveraged Nasdaq exposure, balanced with gold. When the trend deteriorates, it rotates fully into gold.</div>
       </details>
       <details name="how-rotation">
         <summary>Volatility scaling</summary>
-        <div class="answer">When market turbulence rises, Nasdaq exposure is automatically scaled down before trouble compounds.</div>
+        <div class="answer">When market volatility rises, Nasdaq exposure is scaled down automatically to reduce risk as conditions deteriorate.</div>
       </details>
       <details name="how-rotation">
         <summary>Protective stop</summary>
-        <div class="answer">A trailing stop on the whole portfolio cuts risk decisively in deep drawdowns.</div>
+        <div class="answer">A trailing stop on the overall portfolio reduces exposure decisively during severe drawdowns.</div>
       </details>
-      <p>The exact parameters are the result of years of research and walk-forward validation, and are kept private.</p>
+      <p>The exact parameters are the result of years of research and out-of-sample testing, and remain proprietary.</p>
     </section>
 
     <section class="card disclaimer">
       <h2>Important disclaimers</h2>
       <p><strong>Backtest vs live.</strong> Left of the dashed line, the curve is a simulation on historical index data with cost assumptions. It is a model, not a track record. Right of the dashed line is live trading, and live results differ from the model and will keep differing.</p>
-      <p><strong>Leverage risk.</strong> This strategy uses leveraged ETPs. They can lose value rapidly, including in sideways markets (volatility decay). The model's worst historical drawdown exceeds <span id="dd-callout">-50%</span>. You can lose a substantial part of your investment.</p>
+      <p><strong>Leverage risk.</strong> This strategy uses leveraged instruments. They can lose value rapidly, including in sideways markets (volatility decay). The model's worst historical drawdown exceeds <span id="dd-callout">-50%</span>. You can lose a substantial part of your investment.</p>
       <p><strong>Not investment advice.</strong> Past performance does not guarantee future results. Copying any trader involves risk. Do your own research and never invest money you cannot afford to lose.</p>
     </section>
   </main>

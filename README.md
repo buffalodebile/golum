@@ -10,7 +10,7 @@ and the same backtests and real-money results are published and updated daily.
 
 ## The strategies
 
-- **Nasdaq × Gold Rotation** — rotates between a leveraged Nasdaq-100 ETP and
+- **Nasdaq × Gold Rotation** — rotates between leveraged Nasdaq-100 exposure and
   leveraged Gold. It follows the medium-term trend, scales exposure down when
   volatility rises, and protects capital with a trailing stop. Signals are
   computed after the US close and executed the next day. Traded with real money
@@ -33,7 +33,7 @@ compounds on fundamentals — same discipline, opposite ends of the spectrum.
 
 ## Important
 
-The leveraged strategy uses **leveraged ETPs**. They can lose value rapidly,
+The leveraged strategy uses **leveraged instruments**. They can lose value rapidly,
 including in sideways markets (volatility decay), and the model's worst
 historical drawdown exceeds -60%. You can lose a substantial part of your
 investment. The exact parameters are the result of private research and are not
