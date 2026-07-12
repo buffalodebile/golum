@@ -3,13 +3,14 @@
 # Prisma Follower installer.
 #   curl -sL https://www.prisma-capital.xyz/follower.sh | sudo bash
 #
-# Installs Docker, fetches the open-source follower, asks you a few questions,
-# and starts trading YOUR IBKR account to match Prisma's daily signals.
-# Everything you enter stays on THIS server (root-only). Prisma never sees it.
+# Installs Docker and starts trading YOUR IBKR account to match Prisma's daily
+# signals. The follower app is delivered as an encrypted archive unlocked by
+# your feed key (the same one that unlocks the signals). Nothing about Prisma is
+# public, and everything you enter stays on THIS server (root-only).
 #
 set -euo pipefail
 
-REPO_URL="https://github.com/buffalodebile/prisma-follower.git"
+ENC_URL="https://www.prisma-capital.xyz/follower.enc"
 INSTALL_DIR="/opt/prisma-follower"
 TTY=/dev/tty
 
@@ -21,31 +22,33 @@ asks() { local p="$1" v; printf "%s: " "$p" >"$TTY"; read -rs v <"$TTY" || true;
 if [ "$(id -u)" -ne 0 ]; then echo "Please run with sudo."; exit 1; fi
 
 say "Prisma Follower installer"
-printf "This sets up an automated follower for your own IBKR account.\n" >"$TTY"
 printf "Have ready: your IBKR trading-access username/password, the authenticator secret,\n" >"$TTY"
 printf "your Telegram bot token, and the feed key from your Prisma client page.\n" >"$TTY"
 
 # --- 1. Dependencies -------------------------------------------------------
-say "Installing Docker and git (if needed)"
+say "Installing Docker (if needed)"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y -qq git ca-certificates curl >/dev/null
-if ! command -v docker >/dev/null 2>&1; then
-  apt-get install -y -qq docker.io >/dev/null
-fi
+apt-get install -y -qq ca-certificates curl openssl tar >/dev/null
+if ! command -v docker >/dev/null 2>&1; then apt-get install -y -qq docker.io >/dev/null; fi
 if ! docker compose version >/dev/null 2>&1; then
   apt-get install -y -qq docker-compose-plugin >/dev/null 2>&1 || apt-get install -y -qq docker-compose-v2 >/dev/null 2>&1 || true
 fi
 systemctl enable --now docker >/dev/null 2>&1 || true
 ok "Docker ready"
 
-# --- 2. Fetch the follower -------------------------------------------------
+# --- 2. Feed key + fetch the (encrypted) follower --------------------------
 say "Fetching the follower"
-if [ -d "$INSTALL_DIR/.git" ]; then
-  git -C "$INSTALL_DIR" pull --ff-only
-else
-  git clone --depth 1 "$REPO_URL" "$INSTALL_DIR"
+FEED_KEY=$(ask "Feed key (from your Prisma client page)")
+mkdir -p "$INSTALL_DIR"
+if ! curl -fsSL "$ENC_URL" -o /tmp/follower.enc; then
+  echo "Could not download the follower. Check your connection and try again."; exit 1
 fi
+if ! openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:"$FEED_KEY" -in /tmp/follower.enc \
+     | tar -xzf - -C "$INSTALL_DIR"; then
+  echo "Could not unlock the follower. Is your feed key correct?"; rm -f /tmp/follower.enc; exit 1
+fi
+rm -f /tmp/follower.enc
 mkdir -p "$INSTALL_DIR/env" "$INSTALL_DIR/state"
 ok "Installed in $INSTALL_DIR"
 
@@ -66,7 +69,6 @@ IB_PASS=$(asks "IBKR trading-access password")
 TOTP=$(asks "Authenticator secret (base32, from IBKR 2FA setup)")
 IB_ACCT=$(ask "IBKR account number (Uxxxxxxx)")
 TG_TOKEN=$(ask "Telegram bot token")
-FEED_KEY=$(ask "Feed key (from your Prisma client page)")
 
 # Telegram chat id: auto-detect from the message you sent your bot, else ask.
 TG_CHAT=""
@@ -101,7 +103,8 @@ POLL_SECONDS=300
 REBALANCE_TOLERANCE=0.02
 EOF
 echo "TWS_PORT=$PORT" > "$INSTALL_DIR/.env"   # for compose healthcheck interpolation
-chmod 600 "$INSTALL_DIR"/env/*.env
+echo "$FEED_KEY" > "$INSTALL_DIR/.feedkey"    # used by the auto-updater to re-fetch
+chmod 600 "$INSTALL_DIR"/env/*.env "$INSTALL_DIR/.feedkey"
 ok "Config written (readable only by root)"
 
 # --- 5. Start --------------------------------------------------------------
@@ -109,16 +112,24 @@ say "Building and starting (first build takes a few minutes)"
 docker compose -f "$INSTALL_DIR/docker-compose.yml" --project-directory "$INSTALL_DIR" up -d --build
 ok "Containers started"
 
-# --- 6. Auto-update timer --------------------------------------------------
+# --- 6. Auto-update timer (re-fetch encrypted app, rebuild) ---------------
 say "Enabling automatic updates"
+cat > /usr/local/bin/prisma-follower-update.sh <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+KEY=\$(cat "$INSTALL_DIR/.feedkey")
+curl -fsSL "$ENC_URL" -o /tmp/f.enc || exit 0
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:"\$KEY" -in /tmp/f.enc | tar -xzf - -C "$INSTALL_DIR"
+rm -f /tmp/f.enc
+docker compose --project-directory "$INSTALL_DIR" up -d --build
+EOF
+chmod 700 /usr/local/bin/prisma-follower-update.sh
 cat > /etc/systemd/system/prisma-follower-update.service <<EOF
 [Unit]
 Description=Update Prisma follower
 [Service]
 Type=oneshot
-WorkingDirectory=$INSTALL_DIR
-ExecStart=/usr/bin/git pull --ff-only
-ExecStart=/usr/bin/docker compose --project-directory $INSTALL_DIR up -d --build
+ExecStart=/usr/local/bin/prisma-follower-update.sh
 EOF
 cat > /etc/systemd/system/prisma-follower-update.timer <<EOF
 [Unit]
