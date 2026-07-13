@@ -62,7 +62,10 @@ MODE=""
 while [ "$MODE" != "paper" ] && [ "$MODE" != "live" ]; do
   MODE=$(ask "Mode (paper / live) - start with paper" "paper"); MODE=$(echo "$MODE" | tr 'A-Z' 'a-z')
 done
-if [ "$MODE" = "live" ]; then PORT=4001; else PORT=4002; fi
+# Gateway internal API port (localhost inside the gateway, for its healthcheck):
+# 4001 live / 4002 paper. Network API port the follower connects to (socat relay):
+# 4003 live / 4004 paper.
+if [ "$MODE" = "live" ]; then GW_PORT=4001; API_PORT=4003; else GW_PORT=4002; API_PORT=4004; fi
 
 IB_USER=$(ask "IBKR trading-access username")
 IB_PASS=$(asks "IBKR trading-access password")
@@ -88,7 +91,7 @@ TWS_USERID=$IB_USER
 TWS_PASSWORD=$IB_PASS
 TRADING_MODE=$MODE
 TOTP_SECRET=$TOTP
-TWS_PORT=$PORT
+TWS_PORT=$GW_PORT
 EOF
 cat > "$INSTALL_DIR/env/follower.env" <<EOF
 FOLLOWER_STRATEGY=$STRAT
@@ -96,13 +99,13 @@ FOLLOWER_MODE=$MODE
 FEED_KEY=$FEED_KEY
 FEED_BASE_URL=https://www.prisma-capital.xyz/feed
 IB_ACCOUNT=$IB_ACCT
-IB_PORT=$PORT
+IB_PORT=$API_PORT
 TELEGRAM_TOKEN=$TG_TOKEN
 TELEGRAM_CHAT_ID=$TG_CHAT
 POLL_SECONDS=300
 REBALANCE_TOLERANCE=0.02
 EOF
-echo "TWS_PORT=$PORT" > "$INSTALL_DIR/.env"   # for compose healthcheck interpolation
+echo "TWS_PORT=$GW_PORT" > "$INSTALL_DIR/.env"   # for compose healthcheck interpolation (internal port)
 echo "$FEED_KEY" > "$INSTALL_DIR/.feedkey"    # used by the auto-updater to re-fetch
 chmod 600 "$INSTALL_DIR"/env/*.env "$INSTALL_DIR/.feedkey"
 ok "Config written (readable only by root)"
